@@ -2,7 +2,7 @@ Advent2022.
 
 ```php
 $ composer install
-$ ./run
+$ ./run [puzzle]  # eg: ./run 1
 ```
 
 
