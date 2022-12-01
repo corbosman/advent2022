@@ -1,6 +1,6 @@
-<?php namespace Advent\Solvers;
-use Advent\Solutions;
-use Advent\Solver;
+<?php namespace Advent;
+use Lib\Solutions;
+use Lib\Solver;
 use Tightenco\Collect\Support\Collection;
 
 class Advent01_CalorieCounting extends Solver

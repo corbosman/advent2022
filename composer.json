@@ -10,10 +10,11 @@
     },
     "autoload": {
         "psr-4": {
-            "Advent\\": "src/"
+            "Advent\\": "src/",
+            "Lib\\": "lib/"
         },
         "files": [
-            "src/helpers.php"
+            "lib/helpers.php"
         ]
     },
     "config": {

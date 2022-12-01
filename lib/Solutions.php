@@ -1,4 +1,4 @@
-<?php namespace Advent;
+<?php namespace Lib;
 
 class Solutions
 {
