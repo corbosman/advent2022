@@ -1,9 +1,31 @@
 #!/usr/bin/env php
 <?php
 require __DIR__ . '/vendor/autoload.php';
+use Advent\Solutions;
 use function Termwind\{render};
-$total_time = 0;
 
+$solutions = new Solutions;
+
+/* load all available solvers */
+$solvers = collect(scandir('src/Solvers'))
+            ->filter(fn($i) => $i[0] !== '.')
+            ->map(fn($solver) => '\\Advent\\Solvers\\' . basename($solver, '.php'))
+            ->filter(fn($solver) => !isset($argv[1]) || str_contains($solver, str_pad($argv[1], 2, '0', STR_PAD_LEFT)))
+            ->map(fn($solver) => new $solver());
+
+if ($solvers->count() === 0) {
+    exit;
+}
+
+/* solve them */
+foreach($solvers as $solver) {
+    $input = collect(input("inputs/{$solver->puzzle()}.txt"));
+    $solver->solve($input, $solutions);
+}
+
+
+/* now render the output in a nice table */
+$total_time = 0;
 $table = <<<HTML
     <div>
         <table>
@@ -17,30 +39,23 @@ $table = <<<HTML
             </thead>
 HTML;
 
-collect(scandir('src'))
-    ->filter(fn($i)=>$i[0] !== '.')
-    ->filter(function($folder) use (&$table) {
-        $files = collect(scandir("src/{$folder}"))
-            ->filter(fn($i)=>str_ends_with($i, 'php'))
-            ->each(function($file) use ($folder, &$table) {
-                global $total_time;
-                $output = exec(__DIR__ . "/src/{$folder}/{$file} -q", $results);
-                $folder = substr($folder, 3);
+foreach($solutions->all() as $solution) {
+    [$puzzle, $title, $value, $time] = $solution;
+    $total_time += $time;
+    $time = round(($time)*1000,3);
 
-                foreach($results as $result) {
-                    list($answer, $time, $name) = explode(',', $result);
-                    $total_time += (int)$time;
-                    $table .= <<<HTML
-                    <tr class='text-center'>
-                        <td class='text-center text-yellow-400'>{$name}</td>
-                        <td class='text-center text-yellow-400'>{$folder}</td>
-                        <td class='text-center text-green-400'>{$answer}</td>
-                        <td class='text-center text-blue-400'>{$time} ms</td>
-                    </tr>
-                HTML;
-                }
-            });
-    });
+    $table .= <<<HTML
+        <tr class='text-center'>
+          <td class='text-center text-yellow-400'>{$puzzle}</td>
+          <td class='text-center text-yellow-400'>{$title}</td>
+          <td class='text-center text-green-400'>{$value}</td>
+          <td class='text-center text-blue-400'>{$time} ms</td>
+        </tr>
+   HTML;
+}
+
+$total_time = round(($total_time)*1000,3);
+
 $table .= <<<HTML
         <tr>
                           <td class='text-center text-yellow-400'></td>

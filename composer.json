@@ -9,8 +9,11 @@
         "tightenco/collect": "^9.0"
     },
     "autoload": {
+        "psr-4": {
+            "Advent\\": "src/"
+        },
         "files": [
-            "helpers.php"
+            "src/helpers.php"
         ]
     },
     "config": {
