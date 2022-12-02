@@ -13,6 +13,10 @@ class Solver
     {
         $this->reflection = new ReflectionClass($this);
         $this->input = collect(input("inputs/{$this->puzzle()}.txt"));
+    }
+
+    public function start_timer()
+    {
         $this->timer = microtime(true);
     }
 

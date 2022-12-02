@@ -5,6 +5,8 @@ class Advent02_RockPaperScissors extends Solver
 {
     public function solve() : array
     {
+        $this->start_timer();
+
         $score_a = $this->input->map(fn($game) => match($game) {
             'A X' => 4, 'A Y' => 8, 'A Z' => 3,
             'B X' => 1, 'B Y' => 5, 'B Z' => 9,
