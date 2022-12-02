@@ -10,16 +10,12 @@ $solvers = collect(scandir('src'))
             ->filter(fn($i) => $i[0] !== '.')
             ->map(fn($solver) => '\\Advent\\' . basename($solver, '.php'))
             ->filter(fn($solver) => !isset($argv[1]) || str_contains($solver, str_pad($argv[1], 2, '0', STR_PAD_LEFT)))
-            ->map(fn($solver) => new $solver());
+            ->map(fn($solver) => new $solver())
+            ->each(function($solver) use ($solutions) {
+                $input = collect(input("inputs/{$solver->puzzle()}.txt"));
+                $solver->solve($input, $solutions);
+            });
 
-if ($solvers->count() === 0) {
-    exit;
+if ($solvers->count() > 0) {
+    render_output($solutions);
 }
-
-/* solve them */
-foreach($solvers as $solver) {
-    $input = collect(input("inputs/{$solver->puzzle()}.txt"));
-    $solver->solve($input, $solutions);
-}
-
-render_output($solutions);
