@@ -1,7 +1,7 @@
 <?php namespace Advent;
-use Lib\Solver;
+use Lib\solver;
 
-class aoc01_calorie_counting extends Solver
+class aoc01_calorie_counting extends solver
 {
     public function solve() : array
     {

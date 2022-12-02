@@ -1,7 +1,7 @@
 <?php namespace Advent;
-use Lib\Solver;
+use Lib\solver;
 
-class aoc02_rock_paper_scissors extends Solver
+class aoc02_rock_paper_scissors extends solver
 {
     public function solve() : array
     {
