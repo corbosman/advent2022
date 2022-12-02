@@ -5,7 +5,7 @@ class Solutions
     protected float $time;
     public array $solutions;
 
-    public function start_timer() : void
+    public function __construct()
     {
         $this->time = microtime(true);
     }
