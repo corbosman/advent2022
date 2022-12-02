@@ -11,10 +11,7 @@ $solvers = collect(scandir('src'))
             ->map(fn($solver) => '\\Advent\\' . basename($solver, '.php'))
             ->filter(fn($solver) => !isset($argv[1]) || str_contains($solver, str_pad($argv[1], 2, '0', STR_PAD_LEFT)))
             ->map(fn($solver) => new $solver())
-            ->each(function($solver) use ($solutions) {
-                $input = collect(input("inputs/{$solver->puzzle()}.txt"));
-                $solver->solve($input, $solutions);
-            });
+            ->each(fn($solver) => $solver->solve(collect(input("inputs/{$solver->puzzle()}.txt")), $solutions));
 
 if ($solvers->count() > 0) {
     render_output($solutions);
