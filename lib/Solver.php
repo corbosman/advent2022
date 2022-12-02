@@ -15,7 +15,7 @@ class Solver
         $this->input = collect(input("inputs/{$this->puzzle()}.txt"));
     }
 
-    public function start_timer()
+    public function start_timer() : void
     {
         $this->timer = microtime(true);
     }
@@ -31,12 +31,12 @@ class Solver
     /* get the puzzle number from the class name */
     public function puzzle() : string
     {
-        return substr($this->reflection->getShortName(), 6, 2);
+        return substr($this->reflection->getShortName(), 3, 2);
     }
 
     /* get the title from the class name */
     public function title() : string
     {
-        return trim(implode(' ', preg_split('/(?=[A-Z])/', substr($this->reflection->getShortName(), 9))));
+        return ucwords(str_replace('_', ' ', substr($this->reflection->getShortName(), 6)));
     }
 }
