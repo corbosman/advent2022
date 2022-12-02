@@ -7,13 +7,11 @@ class Advent02_RockPaperScissors extends Solver
 {
     public function solve(Collection $input, Solutions $solutions) : void
     {
-        $score_a = $input->map(function($game) use ($solutions) {
-           return match($game) {
+        $score_a = $input->map(fn($game) => match($game) {
                'A X' => 4, 'A Y' => 8, 'A Z' => 3,
                'B X' => 1, 'B Y' => 5, 'B Z' => 9,
-               'C X' => 7, 'C Y' => 2, 'C Z' => 6,
-           };
-        });
+               'C X' => 7, 'C Y' => 2, 'C Z' => 6
+        );
 
         $score_b = $input->map(function($game) use ($solutions) {
             return match($game) {
