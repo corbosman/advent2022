@@ -1,18 +1,15 @@
 #!/usr/bin/env php
 <?php
 require __DIR__ . '/vendor/autoload.php';
-use Lib\Solutions;
-
-$solutions = new Solutions;
 
 /* load all available solvers */
-$solvers = collect(scandir('src'))
-            ->filter(fn($i) => $i[0] !== '.')
-            ->map(fn($solver) => '\\Advent\\' . basename($solver, '.php'))
-            ->filter(fn($solver) => !isset($argv[1]) || str_contains($solver, str_pad($argv[1], 2, '0', STR_PAD_LEFT)))
-            ->map(fn($solver) => new $solver())
-            ->each(fn($solver) => $solver->solve(collect(input("inputs/{$solver->puzzle()}.txt")), $solutions));
+$solutions = collect(scandir('src'))
+             ->filter(fn($i) => $i[0] !== '.')
+             ->map(fn($solver) => '\\Advent\\' . basename($solver, '.php'))
+             ->filter(fn($solver) => !isset($argv[1]) || str_contains($solver, str_pad($argv[1], 2, '0', STR_PAD_LEFT)))
+             ->map(fn($solver) => new $solver())
+             ->reduce(fn($solutions, $solver) => $solutions->merge($solver->solve()), collect());
 
-if ($solvers->count() > 0) {
+if ($solutions->count() > 0) {
     render_output($solutions);
 }
