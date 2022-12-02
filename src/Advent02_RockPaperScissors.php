@@ -1,11 +1,10 @@
 <?php namespace Advent;
 use Lib\Solutions;
 use Lib\Solver;
-use Tightenco\Collect\Support\Collection;
 
 class Advent02_RockPaperScissors extends Solver
 {
-    public function solve(Collection $input, Solutions $solutions) : void
+    public function solve($input, Solutions $solutions) : void
     {
         $score_a = $input->map(fn($game) => match($game) {
             'A X' => 4, 'A Y' => 8, 'A Z' => 3,

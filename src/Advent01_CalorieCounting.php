@@ -1,11 +1,10 @@
 <?php namespace Advent;
 use Lib\Solutions;
 use Lib\Solver;
-use Tightenco\Collect\Support\Collection;
 
 class Advent01_CalorieCounting extends Solver
 {
-    public function solve(Collection $input, Solutions $solutions) : void
+    public function solve($input, Solutions $solutions) : void
     {
         $elves = $input->chunkWhile(fn ($value) => $value !== "")
                         ->map(fn ($elf) => $elf->filter(fn($cal) => $cal !== ""))
