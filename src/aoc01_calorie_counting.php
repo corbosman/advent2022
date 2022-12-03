@@ -7,12 +7,22 @@ class aoc01_calorie_counting extends solver
     {
         $this->start_timer();
 
-        $elves = $this->input->chunkWhile(fn ($value) => $value !== "")
-                        ->map(fn ($elf) => $elf->filter(fn($cal) => $cal !== ""))
-                        ->map(fn ($elf) => $elf->sum());
+        $elves = [];
+        $total = 0;
 
-        $this->solution('1a', $elves->max());
-        $this->solution('1b', $elves->sort()->take(-3)->sum());
+        foreach($this->input as $calories) {
+            if ($calories === "") {
+                $elves[] = $total;
+                $total = 0;
+            } else {
+                $total += (int)$calories;
+            }
+        }
+
+        rsort($elves);
+
+        $this->solution('1a', $elves[0]);
+        $this->solution('1b', $elves[0] + $elves[1] + $elves[2]);
 
         return $this->solutions;
     }
