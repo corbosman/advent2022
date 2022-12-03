@@ -28,8 +28,9 @@ class aoc03_rucksack_reorganization extends solver
     public function solve_b() : void
     {
         $badges = collect();
+        $groups = $this->input->map(fn($r) => str_split($r))->chunk(3)->map(fn($r) => $r->values());
 
-        foreach($this->input->map(fn($r) => str_split($r))->chunk(3)->map(fn($r) => $r->values()) as $group) {
+        foreach($groups as $group) {
             $badges = $badges->merge(array_unique(array_intersect($group[0], $group[1], $group[2])));
         }
 
