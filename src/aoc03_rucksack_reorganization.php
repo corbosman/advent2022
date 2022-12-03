@@ -27,14 +27,15 @@ class aoc03_rucksack_reorganization extends solver
 
     public function solve_b() : void
     {
-        $badges = collect();
-        $groups = $this->input->map(fn($r) => str_split($r))->chunk(3)->map(fn($r) => $r->values());
+        $solution = $this->input
+                    ->map(fn($r) => str_split($r))
+                    ->chunk(3)
+                    ->map(fn($r) => $r->values())
+                    ->flatMap(fn($group) => array_unique(array_intersect($group[0], $group[1], $group[2])))
+                    ->map(fn($item) => $this->priority($item))
+                    ->sum();
 
-        foreach($groups as $group) {
-            $badges = $badges->merge(array_unique(array_intersect($group[0], $group[1], $group[2])));
-        }
-
-        $this->solution('3b', $badges->map(fn($item) => $this->priority($item))->sum());
+        $this->solution('3b', $solution);
     }
 
     public function priority($item) : int
