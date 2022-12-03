@@ -15,14 +15,13 @@ class aoc03_rucksack_reorganization extends solver
 
     public function solve_a() : void
     {
-        $doubles = collect();
+        $solution = $this->input
+                    ->map(fn($r) => str_split($r, strlen($r)/2))
+                    ->flatMap(fn($r) => array_unique(array_intersect(str_split($r[0]), str_split($r[1]))))
+                    ->map(fn($item) => $this->priority($item))
+                    ->sum();
 
-        foreach($this->input as $rucksack) {
-            [$first, $second] = str_split($rucksack, strlen($rucksack)/2);
-            $doubles = $doubles->merge(array_unique(array_intersect(str_split($first),str_split($second))));
-        }
-
-        $this->solution('3a', $doubles->map(fn($item) => $this->priority($item))->sum());
+        $this->solution('3a', $solution);
     }
 
     public function solve_b() : void
