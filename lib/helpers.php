@@ -6,6 +6,11 @@ function input($path) : array
     return file(realpath(dirname($_SERVER['PHP_SELF'])) . '/' .  $path, FILE_IGNORE_NEW_LINES);
 }
 
+function output($str) : void
+{
+    print_r($str . "\n");
+}
+
 function render_output($solutions) : void
 {
     $total_time = 0;

@@ -5,7 +5,7 @@ use Tightenco\Collect\Support\Collection;
 class solver
 {
     protected float $timer;
-    protected array $solutions;
+    protected array $solutions = [];
     protected Collection $input;
     protected ReflectionClass $reflection;
 
