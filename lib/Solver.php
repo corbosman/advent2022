@@ -24,7 +24,7 @@ class solver
     public function solution($puzzle, $value) : void
     {
         $time = microtime(true);
-        $this->solutions[] = [$puzzle, $value, $this->title(), $time - $this->timer];
+        $this->solutions[] = [$puzzle, $this->title(), $value, $time - $this->timer];
         $this->timer = $time;
     }
 
