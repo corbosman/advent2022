@@ -9,10 +9,11 @@ class solver
     protected Collection $input;
     protected ReflectionClass $reflection;
 
-    public function __construct()
+    public function __construct($options)
     {
         $this->reflection = new ReflectionClass($this);
-        $this->input = collect(input("inputs/{$this->puzzle()}.txt"));
+        $puzzle = isset($options['e']) ? $this->puzzle() . '_example.txt' : $this->puzzle() . '.txt';
+        $this->input = collect(input("inputs/{$puzzle}"));
     }
 
     public function start_timer() : void
