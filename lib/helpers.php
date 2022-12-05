@@ -8,7 +8,8 @@ function input($path) : array
 
 function output($str) : void
 {
-    print_r($str . "\n");
+    print_r($str);
+    print_r("\n");
 }
 
 function render_output($solutions) : void
