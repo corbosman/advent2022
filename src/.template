@@ -3,7 +3,7 @@ use Lib\solver;
 
 class aoc0 extends solver
 {
-    public function solve() : void
+    public function solve() : array
     {
 
     }
