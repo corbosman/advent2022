@@ -3,7 +3,7 @@
 require __DIR__ . '/vendor/autoload.php';
 ini_set('memory_limit','2048M');
 
-$options = getopt("e");
+$options = getopt("e:");
 
 /* load all available solvers */
 $solutions = collect(scandir('src'))

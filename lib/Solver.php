@@ -12,8 +12,8 @@ class solver
     public function __construct($options)
     {
         $this->reflection = new ReflectionClass($this);
-        $puzzle = isset($options['e']) ? $this->puzzle() . '_example.txt' : $this->puzzle() . '.txt';
-        $this->input = collect(input("inputs/{$puzzle}"));
+        $puzzle = $options['e'] ?? $this->puzzle();
+        $this->input = collect(input("inputs/{$puzzle}.txt"));
     }
 
     public function start_timer() : void
