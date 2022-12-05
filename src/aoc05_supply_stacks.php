@@ -12,9 +12,8 @@ class aoc05_supply_stacks extends solver
 
         /* move all the crates */
         foreach($moves as $move) {
-            preg_match('/^move (\d+) from (\d+) to (\d+)$/', $move, $m);
-            $stacks_a = $this->move_crates($stacks_a, (int)$m[1], (int)$m[2], (int)$m[3]);
-            $stacks_b = $this->move_crates($stacks_b, (int)$m[1], (int)$m[2], (int)$m[3], false);
+            $stacks_a = $this->move_crates($stacks_a, $move[0], $move[1], $move[2]);
+            $stacks_b = $this->move_crates($stacks_b, $move[0], $move[1], $move[2], false);
         }
 
         $this->solution('5a', $this->top_crates($stacks_a));
@@ -53,6 +52,11 @@ class aoc05_supply_stacks extends solver
             }
         }
 
-        return [$stacks, $stacks, $input->slice($num+2)];
+        $moves = $input->slice($num+2)->map(function($move) {
+            preg_match('/^move (\d+) from (\d+) to (\d+)$/', $move, $m);
+            return [(int)$m[1], (int)$m[2], (int)$m[3]];
+        });
+
+        return [$stacks, $stacks, $moves];
     }
 }
