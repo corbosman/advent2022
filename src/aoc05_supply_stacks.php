@@ -1,6 +1,5 @@
 <?php namespace Advent;
 use Lib\solver;
-use Tightenco\Collect\Support\Collection;
 
 class aoc05_supply_stacks extends solver
 {
@@ -36,7 +35,7 @@ class aoc05_supply_stacks extends solver
         return array_reduce($stacks, fn($c, $i) => $c . end($i), '');
     }
 
-    public function parse_input(Collection $input) : array
+    public function parse_input($input) : array
     {
         $stacks = [];
         $num_stack = (int)ceil(strlen($input[0])/4);
