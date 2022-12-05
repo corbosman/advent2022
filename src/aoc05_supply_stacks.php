@@ -47,9 +47,13 @@ class aoc05_supply_stacks extends solver
             for($s=0; $s<$num_stack; $s++) {
                 $i = ($s*4)+1;
                 if(ctype_alpha($line[$i])) {
-                    array_unshift($stacks[$s], $line[$i]);
+                    $stacks[$s][] = $line[$i];
                 }
             }
+        }
+
+        foreach($stacks as $k => $stack) {
+            $stacks[$k] = array_reverse($stack);
         }
 
         $moves = $input->slice($num+2)->map(function($move) {
