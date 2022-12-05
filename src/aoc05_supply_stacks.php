@@ -11,7 +11,7 @@ class aoc05_supply_stacks extends solver
         /* parse the input in an array of stacks and an array of moves */
         [$stacks_a, $stacks_b, $moves] = $this->parse_input($this->input);
 
-        /* move all the crates with CrateMover 9000 */
+        /* move all the crates */
         foreach($moves as $move) {
             preg_match('/^move (\d+) from (\d+) to (\d+)$/', $move, $m);
             $stacks_a = $this->move_crates($stacks_a, (int)$m[1], (int)$m[2], (int)$m[3]);
