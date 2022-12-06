@@ -30,17 +30,20 @@ class aoc06_tuning_trouble extends solver
 
     public function window(string $input, int $size, int $window) : int
     {
-        for($i=$window-1; $i<$size; $i++) {
+        for($i=0; $i<$size-$window; $i++) {
             $letters = [];
             $count = 0;
             for($j=$window-1; $j>=0; $j--) {
-                $letter = $input[$i-$j];
-                if (isset($letters[$letter])) break;
+                $letter = $input[$i+$j];
+                if (isset($letters[$letter])) {
+                    $i+=$j;
+                    break;
+                }
                 $count++;
                 $letters[$letter] = 1;
             }
             if ($count === $window) break;
         }
-        return $i+1;
+        return $i+$window;
     }
 }
