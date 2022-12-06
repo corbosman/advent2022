@@ -5,6 +5,7 @@ class aoc0 extends solver
 {
     public function solve() : array
     {
+        $this->start_timer();
 
     }
 }
