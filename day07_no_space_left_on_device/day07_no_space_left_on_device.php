@@ -44,7 +44,7 @@ class day07_no_space_left_on_device extends solver
     private function get_command($line) : array
     {
         $cmd = explode(' ', substr($line, 2));
-        return isset($cmd[1]) ? [$cmd[0], $cmd[1]] : [$cmd[0], null];
+        return [$cmd[0], $cmd[1] ?? null];
     }
 
     private function cd($args) : void
