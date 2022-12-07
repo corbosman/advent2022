@@ -49,8 +49,9 @@ class aoc07_no_space_left_on_device extends solver
 
     private function cd($args) : void
     {
-        if ($args === '..') array_pop($this->path);
-        else {
+        if ($args === '..') {
+            array_pop($this->path);
+        } else {
             $cwd = end($this->path) . $args . '/';
             $this->path[] = $cwd;
             $this->directories[$cwd] = 0;
