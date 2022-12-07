@@ -1,4 +1,4 @@
-<?php namespace Advent;
+<?php namespace day06_tuning_trouble;
 use Lib\solver;
 
 /*
@@ -13,7 +13,7 @@ use Lib\solver;
             ->first();
  */
 
-class aoc06_tuning_trouble extends solver
+class day06_tuning_trouble extends solver
 {
     public function solve() : array
     {

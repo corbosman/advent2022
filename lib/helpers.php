@@ -1,11 +1,6 @@
 <?php
 use function Termwind\{render};
 
-function input($path) : array
-{
-    return file(realpath(dirname($_SERVER['PHP_SELF'])) . '/' .  $path, FILE_IGNORE_NEW_LINES);
-}
-
 function output($str) : void
 {
     print_r($str);

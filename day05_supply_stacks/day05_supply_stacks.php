@@ -1,7 +1,7 @@
-<?php namespace Advent;
+<?php namespace day05_supply_stacks;
 use Lib\solver;
 
-class aoc05_supply_stacks extends solver
+class day05_supply_stacks extends solver
 {
     public function solve() : array
     {

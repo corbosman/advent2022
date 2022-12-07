@@ -1,7 +1,7 @@
-<?php namespace Advent;
+<?php namespace day04_camp_cleanup;
 use Lib\solver;
 
-class aoc04_camp_cleanup extends solver
+class day04_camp_cleanup extends solver
 {
     public function solve() : array
     {

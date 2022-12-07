@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5b6485ad57f42d704bd1447946725f3a",
+    "content-hash": "cd1264ce869904e71bddddb5769d1e0b",
     "packages": [
         {
             "name": "cash/lrucache",
@@ -941,6 +941,57 @@
                 }
             ],
             "time": "2022-12-03T22:32:58+00:00"
+        },
+        {
+            "name": "teewurst/psr4-advanced-wildcard-composer-plugin",
+            "version": "v3.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/teewurst/psr4-advanced-wildcard-composer-plugin.git",
+                "reference": "596d35bdd08d397a4e05c0653867efacfa4b8c2f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/teewurst/psr4-advanced-wildcard-composer-plugin/zipball/596d35bdd08d397a4e05c0653867efacfa4b8c2f",
+                "reference": "596d35bdd08d397a4e05c0653867efacfa4b8c2f",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.1|^2.0",
+                "ext-json": "*",
+                "php": "^7.1|^8.0"
+            },
+            "require-dev": {
+                "composer/composer": "^2.0",
+                "phpspec/prophecy-phpunit": "^2.0",
+                "phpstan/phpstan": "^0.12.52",
+                "phpunit/phpunit": "^9.0"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "teewurst\\Prs4AdvancedWildcardComposer\\Plugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "teewurst\\Prs4AdvancedWildcardComposer\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Martin Ruf",
+                    "email": "Martin.Ruf@check24.de"
+                }
+            ],
+            "description": "Adds a parser to enable composer, to be used with wildcards",
+            "support": {
+                "issues": "https://github.com/teewurst/psr4-advanced-wildcard-composer-plugin/issues",
+                "source": "https://github.com/teewurst/psr4-advanced-wildcard-composer-plugin/tree/v3.0.1"
+            },
+            "time": "2022-03-16T10:12:30+00:00"
         },
         {
             "name": "tightenco/collect",

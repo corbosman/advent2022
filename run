@@ -6,9 +6,9 @@ ini_set('memory_limit','2048M');
 $options = getopt("e:");
 
 /* load all available solvers */
-$solutions = collect(scandir('src'))
-             ->filter(fn($i) => $i[0] !== '.')
-             ->map(fn($solver) => '\\Advent\\' . basename($solver, '.php'))
+$solutions = collect(scandir('.'))
+             ->filter(fn($i) => str_starts_with($i, 'day'))
+             ->map(fn($solver) => "\\{$solver}\\{$solver}")
              ->filter(fn($solver) => !is_numeric(end($argv)) || str_contains($solver, str_pad(end($argv), 2, '0', STR_PAD_LEFT)))
              ->map(fn($solver) => new $solver($options))
              ->reduce(fn($solutions, $solver) => $solutions->merge($solver->solve()), collect());

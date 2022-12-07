@@ -1,8 +1,8 @@
-<?php namespace Advent;
+<?php namespace day07_no_space_left_on_device;
 use Lib\solver;
 use Tightenco\Collect\Support\Collection;
 
-class aoc07_no_space_left_on_device extends solver
+class day07_no_space_left_on_device extends solver
 {
     public Collection $directories;     // all directories we encounter
     public array $path = [];            // current path while traversing

@@ -1,7 +1,7 @@
-<?php namespace Advent;
+<?php namespace day03_rucksack_reorganization;
 use Lib\solver;
 
-class aoc03_rucksack_reorganization extends solver
+class day03_rucksack_reorganization extends solver
 {
     public function solve() : array
     {

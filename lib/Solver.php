@@ -13,7 +13,7 @@ class solver
     {
         $this->reflection = new ReflectionClass($this);
         $puzzle = $options['e'] ?? $this->puzzle();
-        $this->input = collect(input("inputs/{$puzzle}.txt"));
+        $this->input = collect(file(dirname($this->reflection->getFileName()) . "/input/{$puzzle}.txt", FILE_IGNORE_NEW_LINES));
     }
 
     public function start_timer() : void
