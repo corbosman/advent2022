@@ -13,7 +13,7 @@ class solver
     {
         $this->reflection = new ReflectionClass($this);
         $puzzle = $options['e'] ?? $this->puzzle();
-        $this->input = collect(file(dirname($this->reflection->getFileName()) . "/input/{$puzzle}.txt", FILE_IGNORE_NEW_LINES));
+        $this->input = $this->read_input($puzzle);
     }
 
     public function start_timer() : void
@@ -39,5 +39,14 @@ class solver
     public function title() : string
     {
         return ucwords(str_replace('_', ' ', substr($this->reflection->getShortName(), 6)));
+    }
+
+    private function read_input(mixed $puzzle) : Collection
+    {
+        $filename = dirname($this->reflection->getFileName()) . "/input/{$puzzle}.txt";
+        if (file_exists($filename)) {
+            $file = file(dirname($this->reflection->getFileName()) . "/input/{$puzzle}.txt", FILE_IGNORE_NEW_LINES);
+        }
+        return collect($file);
     }
 }
