@@ -24,10 +24,9 @@ class day08_treetop_tree_house extends solver
         $visible = array_fill(0, $size, array_fill(0, $size, 0));
 
         for($i=0; $i<$size; $i++) {
-            $visible = $this->line_of_sight($trees, $visible, $size, $i, 0, 0, 1);
-            $visible = $this->line_of_sight($trees, $visible, $size, $i, $size-1, 0, -1);
-            $visible = $this->line_of_sight($trees, $visible, $size, 0, $i, 1, 0);
-            $visible = $this->line_of_sight($trees, $visible, $size, $size-1, $i, -1, 0);
+            foreach([[$i,0,0,1],[$i,$size-1,0,-1],[0,$i,1,0],[$size-1,$i,-1,0]] as [$x, $y, $dx, $dy]) {
+                $visible = $this->line_of_sight($trees, $visible, $size, $x, $y, $dx, $dy);
+            }
         }
         return $visible;
     }
