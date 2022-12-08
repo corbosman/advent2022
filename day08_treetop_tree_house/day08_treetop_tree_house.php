@@ -22,47 +22,28 @@ class day08_treetop_tree_house extends solver
     public function solve_a($trees, $size) : array
     {
         $visible = array_fill(0, $size, array_fill(0, $size, 0));
-        $visible = $this->look_horizontal($trees, $visible, $size, 0, 1);
-        $visible = $this->look_horizontal($trees, $visible, $size, $size-1, -1);
-        $visible = $this->look_vertical($trees, $visible, $size, 0, 1);
-        $visible = $this->look_vertical($trees, $visible, $size, $size-1, -1);
-        return $visible;
-    }
 
-    public function look_horizontal($trees, $visible, $size, $start_col, $delta)
-    {
-        for($row=0; $row<$size; $row++) {
-            $highest = -1;
-            $col = $start_col;
-            while(true) {
-                if ($col < 0 || $col >= $size) break;
-                if ($highest === 9) break;
-                $cur = $trees[$row][$col];
-                if ($cur > $highest) {
-                    $visible[$row][$col] = 1;
-                    $highest = $cur;
-                }
-                $col += $delta;
-            }
+        for($i=0; $i<$size; $i++) {
+            $visible = $this->line_of_sight($trees, $visible, $size, $i, 0, 0, 1);
+            $visible = $this->line_of_sight($trees, $visible, $size, $i, $size-1, 0, -1);
+            $visible = $this->line_of_sight($trees, $visible, $size, 0, $i, 1, 0);
+            $visible = $this->line_of_sight($trees, $visible, $size, $size-1, $i, -1, 0);
         }
         return $visible;
     }
 
-    public function look_vertical($trees, $visible, $size, $start_row, $delta)
+    public function line_of_sight($trees, $visible, $size, $row, $col, $dx, $dy) : array
     {
-        for($col=0; $col<$size; $col++) {
-            $highest = -1;
-            $row = $start_row;
-            while(true) {
-                if ($row < 0 || $row >= $size) break;
-                if ($highest === 9) break;
-                $cur = $trees[$row][$col];
-                if ($cur > $highest) {
-                    $visible[$row][$col] = 1;
-                    $highest = $cur;
-                }
-                $row += $delta;
+        $highest = -1;
+        for($i=0; $i<$size; $i++) {
+            if ($highest === 9) break;
+            $cur = $trees[$row][$col];
+            if ($cur > $highest) {
+                $visible[$row][$col] = 1;
+                $highest = $cur;
             }
+            $row+=$dx;
+            $col+=$dy;
         }
         return $visible;
     }
@@ -90,6 +71,16 @@ class day08_treetop_tree_house extends solver
             if ($trees[$row][$col] >= $highest) break;
         }
         return $score;
+    }
+
+    public function print_tree($tree, $size)
+    {
+        for($i=0; $i<$size; $i++) {
+            for($j=0; $j<$size; $j++) {
+                echo($tree[$i][$j]) . " ";
+            }
+            echo "\n";
+        }
     }
 
 }
