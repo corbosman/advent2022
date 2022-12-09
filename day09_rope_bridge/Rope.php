@@ -1,6 +1,4 @@
-<?php
-
-namespace day09_rope_bridge;
+<?php namespace day09_rope_bridge;
 
 class Rope
 {
