@@ -18,11 +18,11 @@ class Rope
     {
         /* transform the direction into deltas */
         match ($d) {
-            'R' => [$dx, $dy] = [1,0], 'L' => [$dx, $dy] = [-1,0], 'U' => [$dx, $dy] = [0,1], 'D' => [$dx, $dy] = [0,-1]
+            'R' => $this->head()->move(1,0),
+            'L' => $this->head()->move(-1,0),
+            'U' => $this->head()->move(0,1),
+            'D' => $this->head()->move(0,-1)
         };
-
-        /* move the head of the rope */
-        $this->head()->move($dx, $dy);
 
         /* now move the tail */
         $this->move_knots();
