@@ -9,10 +9,10 @@ class day09_rope_bridge extends solver
         $this->start_timer();
 
         $rope = $this->swing($this->input, 2);
-        $this->solution('9a', $this->unique_positions(end($rope->knots)->path));
+        $this->solution('9a', $this->visited($rope->tail()->path()));
 
         $rope = $this->swing($this->input, 10);
-        $this->solution('9b', $this->unique_positions(end($rope->knots)->path));
+        $this->solution('9b', $this->visited($rope->tail()->path()));
         return $this->solutions;
     }
 
@@ -33,7 +33,7 @@ class day09_rope_bridge extends solver
         return $rope;
     }
 
-    public function unique_positions($path) : int
+    public function visited($path) : int
     {
         return count(array_unique(array_map(fn($i)=>"{$i[0]}_{$i[1]}", $path)));
     }

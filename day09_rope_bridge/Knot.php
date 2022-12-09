@@ -16,4 +16,9 @@ class Knot
         $this->y += $dy;
         $this->path[] = [$this->x, $this->y];
     }
+
+    public function path() : array
+    {
+        return $this->path;
+    }
 }

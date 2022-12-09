@@ -70,4 +70,9 @@ class Rope
     {
         return $this->knots[0];
     }
+
+    public function tail() : Knot
+    {
+        return end($this->knots);
+    }
 }
