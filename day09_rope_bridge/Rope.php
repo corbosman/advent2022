@@ -59,7 +59,6 @@ class Rope
     public function move_toward(Knot $head, Knot $tail) : array
     {
         /* the delta to the head can be 0,1,2.  If it's 2, it means we want to move 1 diagonally */
-
         $dx = match($head->x - $tail->x) { 0=>0, -1,-2=>-1, 1,2=>1 };
         $dy = match($head->y - $tail->y) { 0=>0, -1,-2=>-1, 1,2=>1 };
 
