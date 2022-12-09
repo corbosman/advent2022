@@ -16,7 +16,7 @@ class Rope
      */
     public function move(string $d) : void
     {
-        /* transform the direction into deltas */
+        /* move the head based on the direction */
         match ($d) {
             'R' => $this->head()->move(1,0),
             'L' => $this->head()->move(-1,0),
