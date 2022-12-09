@@ -13,6 +13,7 @@ class day09_rope_bridge extends solver
 
         $rope = $this->swing($this->input, 10);
         $this->solution('9b', $this->visited($rope->tail()->path()));
+
         return $this->solutions;
     }
 
