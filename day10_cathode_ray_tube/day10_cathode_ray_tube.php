@@ -37,7 +37,7 @@ class day10_cathode_ray_tube extends solver
         echo "\n=========== output for 10b ============\n";
         foreach (range(0, $cycles->count()-2) as $i) {
             $cycle = $i%40;
-            echo $cycles[$i+1] === $cycle || $cycles[$i+1] === $cycle-1 || $cycles[$i+1] === $cycle+1 ? "\033[31m#" : "\033[0m ";
+            echo $cycle === $cycles[$i+1] || $cycle-1 === $cycles[$i+1] || $cycle+1 === $cycles[$i+1] ? "\033[31m#" : "\033[0m ";
             if (($cycle%40)===39) echo "\n";
         }
         echo "=======================================\n\n";
