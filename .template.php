@@ -1,8 +1,8 @@
-<?php namespace day0;
+<?php namespace XXX;
 use Lib\solver;
 use Tightenco\Collect\Support\Collection;
 
-class day0 extends solver
+class XXX extends solver
 {
     public function solve() : array
     {

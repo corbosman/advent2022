@@ -2,7 +2,7 @@
 use ReflectionClass;
 use Tightenco\Collect\Support\Collection;
 
-class solver
+class Solver
 {
     protected float $timer;
     protected array $solutions = [];
