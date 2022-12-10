@@ -9,8 +9,7 @@ class day10_cathode_ray_tube extends solver
         $this->start_timer();
 
         $cycles = $this->execute($this->input);
-        $strength = collect([20,60,100,140,180,220])->map(fn($s)=>$s*$cycles[$s])->sum();
-        $this->solution('10a', $strength);
+        $this->solution('10a', collect([20,60,100,140,180,220])->map(fn($s)=>$s*$cycles[$s])->sum());
 
         $this->render($cycles);
         $this->solution('10b', 'see output');
