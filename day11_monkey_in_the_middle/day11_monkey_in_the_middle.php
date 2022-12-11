@@ -72,8 +72,7 @@ class day11_monkey_in_the_middle extends solver
                 '^' => fn($a) => $a ** $val,
             };
 
-            $monkey = new Monkey($items, $operation, $test, $true, $false);
-            $monkeys[] = $monkey;
+            $monkeys[] = new Monkey($items, $operation, $test, $true, $false);
         }
         return $monkeys;
     }
