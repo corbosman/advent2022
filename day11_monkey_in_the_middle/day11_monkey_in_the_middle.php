@@ -15,7 +15,7 @@ class day11_monkey_in_the_middle extends solver
         $monkeys = $this->keep_away($monkeys_a, 20);
         $this->solution('11a', $monkeys[0] * $monkeys[1]);
 
-        $monkeys = $this->keep_away($monkeys_b, 10000, 'b');
+        $monkeys = $this->keep_away($monkeys_b, 10000);
         $this->solution('11b', $monkeys[0] * $monkeys[1]);
 
         return $this->solutions;
