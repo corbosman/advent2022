@@ -35,8 +35,8 @@ class day11_monkey_in_the_middle extends solver
                     if ($rounds === 20) $item = (int)floor($item / 3);
 
                     /* now perform the actual test */
-                    $mod = ($item % $monkey->mod === 0) ? 'true' : 'false';
-                    $throw_to = $monkey->$mod;
+                    $test = ($item % $monkey->mod === 0) ? 'true' : 'false';
+                    $throw_to = $monkey->$test;
 
                     $monkeys[$throw_to]->items[] = $item;
                 }
