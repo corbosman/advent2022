@@ -11,3 +11,4 @@ DAY=$1
 mkdir -p $DAY/input
 cat .template.php | sed "s/XXX/$DAY/g" > $DAY/$DAY.php
 composer update
+rm composer.development.json
