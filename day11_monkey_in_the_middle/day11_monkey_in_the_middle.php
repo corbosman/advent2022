@@ -13,12 +13,10 @@ class day11_monkey_in_the_middle extends solver
         $monkeys_b = array_map(fn($i)=>clone($i), $monkeys_a);
 
         $monkeys = $this->keep_away($monkeys_a, 20);
-        $top_monkeys = collect($monkeys)->map(fn($i)=>$i->inspected)->sort()->reverse()->take(2)->values();
-        $this->solution('11a', $top_monkeys[0] * $top_monkeys[1]);
+        $this->solution('11a', $monkeys[0] * $monkeys[1]);
 
         $monkeys = $this->keep_away($monkeys_b, 10000, 'b');
-        $top_monkeys = collect($monkeys)->map(fn($i)=>$i->inspected)->sort()->reverse()->take(2)->values();
-        $this->solution('11b', $top_monkeys[0] * $top_monkeys[1]);
+        $this->solution('11b', $monkeys[0] * $monkeys[1]);
 
         return $this->solutions;
     }
@@ -45,7 +43,8 @@ class day11_monkey_in_the_middle extends solver
                 $monkey->items = [];
             }
         }
-        return $monkeys;
+
+        return collect($monkeys)->map(fn($i)=>$i->inspected)->sort()->reverse()->values()->toArray();
     }
 
     private function parse_input($input) : array
