@@ -9,7 +9,8 @@ class Monkey
     public function __construct(
         public array $items,
         public Closure $operation,
-        public int $test,
+        public int $mod,
+        public int $lcm,
         public int $true,
         public int $false,
         public int $inspected = 0) {}

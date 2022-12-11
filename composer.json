@@ -4,6 +4,7 @@
     "require": {
         "php": "^8.1",
         "ext-ctype": "*",
+        "ext-gmp" : "*",
         "cash/lrucache": "^1.0",
         "nunomaduro/termwind": "^1.2",
         "teewurst/psr4-advanced-wildcard-composer-plugin": "^3.0",
