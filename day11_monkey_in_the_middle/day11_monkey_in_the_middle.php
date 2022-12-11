@@ -38,6 +38,7 @@ class day11_monkey_in_the_middle extends solver
                     $test = ($item % $monkey->mod === 0) ? 'true' : 'false';
                     $throw_to = $monkey->$test;
 
+                    /* throw the item to the other monkey */
                     $monkeys[$throw_to]->items[] = $item;
                 }
                 $monkey->items = [];
