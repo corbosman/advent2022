@@ -1,7 +1,4 @@
-<?php
-
-namespace day11_monkey_in_the_middle;
-
+<?php namespace day11_monkey_in_the_middle;
 use Closure;
 
 class Monkey

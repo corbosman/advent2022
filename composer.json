@@ -4,9 +4,11 @@
     "require": {
         "php": "^8.1",
         "ext-ctype": "*",
-        "ext-gmp" : "*",
+        "ext-ds": "*",
+        "ext-gmp": "*",
         "cash/lrucache": "^1.0",
         "nunomaduro/termwind": "^1.2",
+        "php-ds/php-ds": "^1.4",
         "teewurst/psr4-advanced-wildcard-composer-plugin": "^3.0",
         "tightenco/collect": "^9.0"
     },
