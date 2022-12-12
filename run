@@ -2,6 +2,7 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
 ini_set('memory_limit','2048M');
+const INFINITE = 999999999999999;
 
 $options = getopt("e:");
 

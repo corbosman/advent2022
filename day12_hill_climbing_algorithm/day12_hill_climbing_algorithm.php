@@ -11,16 +11,20 @@ class day12_hill_climbing_algorithm extends solver
         $heights    = $this->heights($map);
         $map_width  = count($map[0]);
         $map_height = count($map);
-        $start      = $this->find_start($map, $map_width, $map_height);
+        $s          = $this->find($map, $map_width, $map_height, 'S');
+        $e          = $this->find($map, $map_width, $map_height, 'E');
 
-        $distance = $this->dijkstra($map, $heights, $map_width, $map_height, $start);
-
+        $distance = $this->dijkstra($map, $heights, $map_width, $map_height, $s, 'E');
         $this->solution('12a', $distance);
+
+        $map[$s[0]][$s[1]] = 'a';
+        $distance = $this->dijkstra($map, $heights, $map_width, $map_height, $e, 'a', true);
+        $this->solution('12b', $distance);
 
         return $this->solutions;
     }
 
-    public function dijkstra(array $map, array $heights, int $map_width, int $map_height, array $start) : int
+    public function dijkstra(array $map, array $heights, int $map_width, int $map_height, array $start, string $find, bool $reverse = false) : int
     {
         $q = new Heap;
         $q->insert($start, 0);
@@ -33,15 +37,15 @@ class day12_hill_climbing_algorithm extends solver
             [$x, $y] = $q->extract();
 
             /* we found the best location */
-            if ($map[$x][$y] === 'E') {
+            if ($map[$x][$y] === $find) {
                 return $distances[$x][$y];
             }
 
-            $neighbors = $this->neighbors($heights, $x, $y, $map_width, $map_height, $visited);
+            $neighbors = $this->neighbors($heights, $x, $y, $map_width, $map_height, $visited, $reverse);
 
             foreach($neighbors as [$nx, $ny]) {
                 $distance = $distances[$x][$y] + 1;
-                $distance_n = $distances[$nx][$ny] ?? 99999999999999999;
+                $distance_n = $distances[$nx][$ny] ?? INFINITE;
                 if ($distance < $distance_n) {
                     $distances[$nx][$ny] = $distance;
                     $q->insert([$nx, $ny], $distance);
@@ -57,7 +61,7 @@ class day12_hill_climbing_algorithm extends solver
     /**
      * Get all the neighbors or our current position that we haven't seen yet and are able to visit.
      */
-    protected function neighbors(array $map, int $x, int $y, int $map_width, int $map_height, $visited) : array
+    protected function neighbors(array $map, int $x, int $y, int $map_width, int $map_height, array $visited, bool $reverse) : array
     {
         $neighbors = [];
         $height = $map[$x][$y];
@@ -70,7 +74,10 @@ class day12_hill_climbing_algorithm extends solver
             if ($visited[$x+$dx][$y+$dy] === 1) continue;
 
             /* the next position is too high! */
-            if ($map[$x+$dx][$y+$dy] > $height + 1) continue;
+            if (match($reverse) {
+                false => $map[$x+$dx][$y+$dy] > $height + 1,
+                true  => $map[$x+$dx][$y+$dy] < $height - 1,
+            }) continue;
 
             $neighbors[] = [$x+$dx, $y+$dy];
         }
@@ -89,11 +96,11 @@ class day12_hill_climbing_algorithm extends solver
     /**
      * Find the start of the map
      */
-    private function find_start($map, $map_width, $map_height) : array
+    private function find($map, $map_width, $map_height, string $char) : array
     {
         for($i=0; $i<$map_height; $i++) {
            for($j=0; $j<$map_width; $j++) {
-               if ($map[$i][$j] === 'S') return [$i, $j];
+               if ($map[$i][$j] === $char) return [$i, $j];
            }
         }
         return [-1,-1];
