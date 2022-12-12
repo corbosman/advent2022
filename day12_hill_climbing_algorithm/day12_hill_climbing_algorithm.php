@@ -1,6 +1,5 @@
 <?php namespace day12_hill_climbing_algorithm;
 use Lib\solver;
-use Tightenco\Collect\Support\Collection;
 
 class day12_hill_climbing_algorithm extends solver
 {
