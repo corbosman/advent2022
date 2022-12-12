@@ -28,11 +28,13 @@ class day11_monkey_in_the_middle extends solver
                 foreach($monkey->items as $item) {
                     $monkey->inspected++;
 
-                    /* perform the operation, but mod by the LCM */
-                    $item = ($monkey->operation)($item) % $monkey->lcm;
+                    /* perform the operation */
+                    $item = ($monkey->operation)($item);
 
                     /* only in part A do we divide the result, just abuse the rounds */
                     if ($rounds === 20) $item = (int)floor($item / 3);
+
+                    $item %= $monkey->lcm;
 
                     /* now perform the actual test */
                     $test = ($item % $monkey->mod === 0) ? 'true' : 'false';
@@ -93,6 +95,8 @@ class day11_monkey_in_the_middle extends solver
         foreach($monkeys as $monkey) {
             $monkey->lcm = (int)$lcm;
         }
+
+        output($lcm);
 
         return $monkeys;
     }
