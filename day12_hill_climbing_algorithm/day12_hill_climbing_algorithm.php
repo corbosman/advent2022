@@ -73,7 +73,7 @@ class day12_hill_climbing_algorithm extends solver
             /* already visited this position */
             if ($visited[$x+$dx][$y+$dy] === 1) continue;
 
-            /* the next position is too high! */
+            /* the next position is too steep! */
             if (match($reverse) {
                 false => $map[$x+$dx][$y+$dy] > $height + 1,
                 true  => $map[$x+$dx][$y+$dy] < $height - 1,
