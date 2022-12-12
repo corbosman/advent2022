@@ -61,3 +61,17 @@ function render_output($solutions) : void
 
 }
 
+function print_grid(array $grid, $w)
+{
+    $width = count($grid[0]);
+    $height = count($grid);
+
+    for($i=0; $i<$height; $i++) {
+        for($j=0; $j<$width; $j++) {
+            echo sprintf("%{$w}s ", $grid[$i][$j]);
+        }
+        echo "\n";
+    }
+    echo "\n";
+}
+
