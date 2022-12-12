@@ -1,5 +1,6 @@
 <?php namespace day12_hill_climbing_algorithm;
 use Lib\solver;
+use Tightenco\Collect\Support\Collection;
 
 class day12_hill_climbing_algorithm extends solver
 {
@@ -7,12 +8,7 @@ class day12_hill_climbing_algorithm extends solver
     {
         $this->start_timer();
 
-        $map        = $this->input->map(fn($i)=>str_split($i))->toArray();
-        $heights    = $this->heights($map);
-        $map_width  = count($map[0]);
-        $map_height = count($map);
-        $s          = $this->find($map, $map_width, $map_height, 'S');
-        $e          = $this->find($map, $map_width, $map_height, 'E');
+        [$map, $heights, $map_width, $map_height, $s, $e] = $this->parse($this->input);
 
         $distance = $this->dijkstra($map, $heights, $map_width, $map_height, $s, 'E');
         $this->solution('12a', $distance);
@@ -85,24 +81,30 @@ class day12_hill_climbing_algorithm extends solver
         return $neighbors;
     }
 
-    /**
-     * Convert the map to a map of heights
-     */
-    public function heights(array $map) : array
+    public function parse(Collection $map) : array
     {
-        return array_map(fn($i)=>array_map(fn($j) => match($j) { 'S' => ord('a')-97, 'E' => ord('z')-97, default => ord($j)-97}, $i), $map);
-    }
+        $map        = $map->map(fn($i)=>str_split($i))->toArray();
+        $map_width  = count($map[0]);
+        $map_height = count($map);
+        $heights    = [];
 
-    /**
-     * Find the start of the map
-     */
-    private function find($map, $map_width, $map_height, string $char) : array
-    {
-        for($i=0; $i<$map_height; $i++) {
-           for($j=0; $j<$map_width; $j++) {
-               if ($map[$i][$j] === $char) return [$i, $j];
-           }
+        for($x=0; $x<$map_height; $x++) {
+            $heights[] = [];
+            for($y=0; $y<$map_width; $y++) {
+                $c = $map[$x][$y];
+                if ($c === 'S') {
+                    $s = [$x, $y];
+                    $c = 0;
+                } elseif ($c === 'E') {
+                    $e = [$x, $y];
+                    $c = 25;
+                } else {
+                    $c = ord($c) - 97;
+                }
+
+                $heights[$x][$y] = $c;
+            }
         }
-        return [-1,-1];
+        return [$map, $heights, $map_width, $map_height, $s, $e];
     }
 }
