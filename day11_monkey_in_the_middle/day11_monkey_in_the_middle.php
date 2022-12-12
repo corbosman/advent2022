@@ -28,7 +28,7 @@ class day11_monkey_in_the_middle extends solver
                 foreach($monkey->items as $item) {
                     $monkey->inspected++;
 
-                    /* perform the operation, but divide by the LCM */
+                    /* perform the operation, but mod by the LCM */
                     $item = ($monkey->operation)($item) % $monkey->lcm;
 
                     /* only in part A do we divide the result, just abuse the rounds */
