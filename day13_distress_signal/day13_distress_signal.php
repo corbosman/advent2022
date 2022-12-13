@@ -10,13 +10,13 @@ class day13_distress_signal extends solver
 
         $signal = $this->parse($this->input);
 
-        $this->solution('13a', $this->solve_a($signal->chunk(2)->map->values()->toArray()));
-        $this->solution('13b', $this->solve_b($signal->merge([[[2]],[[6]]])->toArray()));
+        $this->solution('13a', $this->part1($signal->chunk(2)->map->values()->toArray()));
+        $this->solution('13b', $this->part2($signal->merge([[[2]],[[6]]])->toArray()));
 
         return $this->solutions;
     }
 
-    public function solve_a(array $signal) : int
+    public function part1(array $signal) : int
     {
         $sum = 0;
         foreach($signal as $index => [$left, $right]) {
@@ -25,7 +25,7 @@ class day13_distress_signal extends solver
         return $sum;
     }
 
-    public function solve_b(array $signal) : int
+    public function part2(array $signal) : int
     {
        usort($signal, [$this, 'compare']);
        [$div1, $div2] = $this->find_dividers($signal, ['[[2]]', '[[6]]']);
