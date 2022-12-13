@@ -55,6 +55,7 @@ class day13_distress_signal extends solver
     public function find_dividers(array $signal, array $dividers) : array
     {
         $indices = [];
+        $foo = collect($signal)->map(fn($i)=>json_encode($i))->dd();
         foreach($signal as $index => $s) {
             $s = json_encode($s);
             if (in_array($s, $dividers, true)) $indices[] = $index+1;
