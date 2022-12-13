@@ -9,9 +9,9 @@ class day13_distress_signal extends solver
         $this->start_timer();
 
         $signal = $this->parse($this->input);
-        $sum = $this->solve_a($signal);
 
-        $this->solution('13a', $sum);
+        $this->solution('13a', $this->solve_a($signal->chunk(2)->map(fn($i)=>$i->values())->toArray()));
+        $this->solution('13b', $this->solve_b($signal->push([[2]])->push([[6]])->toArray()));
 
         return $this->solutions;
     }
@@ -23,6 +23,13 @@ class day13_distress_signal extends solver
             if ($this->compare($left, $right) === -1) $sum += $index+1;
         }
         return $sum;
+    }
+
+    public function solve_b(array $signal) : int
+    {
+       usort($signal, [$this, 'compare']);
+       [$div1, $div2] = $this->find_divider($signal, '[[2]]', '[[6]]');
+       return $div1 * $div2;
     }
 
     /* -1 = left < right, 0 = left == right, 1 = left > right */
@@ -45,14 +52,23 @@ class day13_distress_signal extends solver
         return count($left) <=> count($right);
     }
 
+    public function find_divider(array $signal, string $div1, string $div2) : array
+    {
+        $d1 = $d2 = null;
+        foreach($signal as $index => $s) {
+            $s = json_encode($s);
+            if ($s === $div1) $d1 = $index+1;
+            elseif ($s === $div2) $d2 = $index+1;
+            if ($d1 !== null && $d2 !== null) break;
+        }
+        return [$d1, $d2];
+    }
+
     /* parse the input, just use json_decode even though it's slow */
-    public function parse(Collection $input) : array
+    public function parse(Collection $input) : Collection
     {
         return $input
             ->filter(fn($i)=>$i!=='')
-            ->map(fn($i)=>json_decode($i, false, 512, JSON_THROW_ON_ERROR))
-            ->chunk(2)
-            ->map(fn($i)=>$i->values())
-            ->toArray();
+            ->map(fn($i)=>json_decode($i, false, 512, JSON_THROW_ON_ERROR));
     }
  }
