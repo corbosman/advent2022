@@ -28,7 +28,7 @@ class day13_distress_signal extends solver
     public function solve_b(array $signal) : int
     {
        usort($signal, [$this, 'compare']);
-       [$div1, $div2] = $this->find_divider($signal, '[[2]]', '[[6]]');
+       [$div1, $div2] = $this->find_dividers($signal, ['[[2]]', '[[6]]']);
        return $div1 * $div2;
     }
 
@@ -52,16 +52,15 @@ class day13_distress_signal extends solver
         return count($left) <=> count($right);
     }
 
-    public function find_divider(array $signal, string $div1, string $div2) : array
+    public function find_dividers(array $signal, array $dividers) : array
     {
-        $d1 = $d2 = null;
+        $indices = [];
         foreach($signal as $index => $s) {
             $s = json_encode($s);
-            if ($s === $div1) $d1 = $index+1;
-            elseif ($s === $div2) $d2 = $index+1;
-            if ($d1 !== null && $d2 !== null) break;
+            if (in_array($s, $dividers, true)) $indices[] = $index+1;
+            if (count($indices) === 2) break;
         }
-        return [$d1, $d2];
+        return $indices;
     }
 
     /* parse the input, just use json_decode even though it's slow */
