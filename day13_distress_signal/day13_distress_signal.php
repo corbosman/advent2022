@@ -31,7 +31,7 @@ class day13_distress_signal extends solver
         /* both are integers, return their spaceship operator */
         if (is_int($left) && is_int($right)) return $left <=> $right;
 
-        /* one of might not be an array, make them both arrays */
+        /* one of them might not be an array, make them both arrays */
         if (is_int($left)) $left = [$left];
         if (is_int($right)) $right = [$right];
 
