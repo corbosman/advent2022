@@ -11,7 +11,7 @@ class day13_distress_signal extends solver
         $signal = $this->parse($this->input);
 
         $this->solution('13a', $this->solve_a($signal->chunk(2)->map(fn($i)=>$i->values())->toArray()));
-        $this->solution('13b', $this->solve_b($signal->push([[2]])->push([[6]])->toArray()));
+        $this->solution('13b', $this->solve_b($signal->merge([[[2]],[[6]]])->toArray()));
 
         return $this->solutions;
     }
