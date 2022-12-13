@@ -54,14 +54,12 @@ class day13_distress_signal extends solver
 
     public function find_dividers(array $signal, array $dividers) : array
     {
-        $indices = [];
-        $foo = collect($signal)->map(fn($i)=>json_encode($i))->dd();
-        foreach($signal as $index => $s) {
-            $s = json_encode($s);
-            if (in_array($s, $dividers, true)) $indices[] = $index+1;
-            if (count($indices) === 2) break;
-        }
-        return $indices;
+        return collect($signal)
+            ->map(fn($i)=>json_encode($i))
+            ->filter(fn($i)=>in_array($i, $dividers, true))
+            ->keys()
+            ->map(fn($i)=>$i+1)
+            ->toArray();
     }
 
     /* parse the input, just use json_decode even though it's slow */
