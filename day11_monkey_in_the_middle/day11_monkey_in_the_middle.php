@@ -96,8 +96,6 @@ class day11_monkey_in_the_middle extends solver
             $monkey->lcm = (int)$lcm;
         }
 
-        output($lcm);
-
         return $monkeys;
     }
 }
