@@ -6,7 +6,7 @@ class day14_regolith_reservoir extends solver
 {
     public array $map;
     public int  $part1_depth = 0;
-    public bool $part1_reached = false;
+    public bool $part1_solved = false;
     public int  $grains_part2 = 0;
 
     public function solve() : array
@@ -27,9 +27,9 @@ class day14_regolith_reservoir extends solver
         if (isset($this->map[$y][$x])) return;
 
         /* we reached the depth for part1, record it */
-        if ($y === $this->part1_depth+1 && !$this->part1_reached) {
+        if ($y === $this->part1_depth+1 && !$this->part1_solved) {
             $this->solution('14a', $this->grains_part2);
-            $this->part1_reached = true;
+            $this->part1_solved = true;
         }
 
         $this->fill_sand($x,   $y+1); // try to fill below
