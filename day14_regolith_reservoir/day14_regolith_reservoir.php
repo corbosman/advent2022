@@ -26,6 +26,9 @@ class day14_regolith_reservoir extends solver
         /* we can not continue on this point since it's already occupied */
         if (isset($this->map[$y][$x])) return;
 
+        /* we have reached the floor, stop! */
+        if ($y >= $this->part1_depth + 2) return;
+
         /* we reached the depth for part1, record it */
         if (!$this->part1_solved && $y === $this->part1_depth+1) {
             $this->solution('14a', $this->grains_part2);
@@ -57,11 +60,6 @@ class day14_regolith_reservoir extends solver
 
         /* set the maximum depth of the cave */
         $this->part1_depth = max(array_keys($map));
-
-        /* now build the floor, values just hardcoded, can also just check the floor depth but this was more visual during debugging */
-        for($x=325; $x<=675;$x++) {
-            $map[$this->part1_depth+2][$x] = '#';
-        }
 
         return $map;
     }
