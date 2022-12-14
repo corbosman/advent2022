@@ -58,7 +58,7 @@ class day14_regolith_reservoir extends solver
         /* set the maximum depth of the cave */
         $this->part1_depth = max(array_keys($map));
 
-        /* now build the floor, values just hardcoded */
+        /* now build the floor, values just hardcoded, can also just check the floor depth but this was more visual during debugging */
         for($x=325; $x<=675;$x++) {
             $map[$this->part1_depth+2][$x] = '#';
         }
