@@ -27,7 +27,7 @@ class day14_regolith_reservoir extends solver
         if (isset($this->map[$y][$x])) return;
 
         /* we reached the depth for part1, record it */
-        if ($y === $this->part1_depth+1 && !$this->part1_solved) {
+        if (!$this->part1_solved && $y === $this->part1_depth+1) {
             $this->solution('14a', $this->grains_part2);
             $this->part1_solved = true;
         }
