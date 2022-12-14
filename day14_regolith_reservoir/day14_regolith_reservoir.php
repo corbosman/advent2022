@@ -13,7 +13,7 @@ class day14_regolith_reservoir extends solver
     {
         $this->start_timer();
 
-        $this->map = $this->create_rock($this->input);
+        $this->map = $this->parse_input($this->input);
         $this->fill_sand(500, 0);
         // solution for 14a is set in the code below
         $this->solution('14b', $this->grains_part2);
@@ -40,7 +40,7 @@ class day14_regolith_reservoir extends solver
         $this->grains_part2++;
     }
 
-    public function create_rock(Collection $input) : array
+    public function parse_input(Collection $input) : array
     {
         $map = [];
         foreach($input as $line) {
