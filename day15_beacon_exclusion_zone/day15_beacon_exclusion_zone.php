@@ -10,8 +10,8 @@ class day15_beacon_exclusion_zone extends solver
 
         [$sensors, $beacons] = $this->parse_input($this->input);
 
-        // $positions = $this->part1($sensors, $beacons, 10);
-        $positions = $this->part1($sensors, $beacons, 2000000);
+        $positions = $this->part1($sensors, $beacons, 10);
+        //$positions = $this->part1($sensors, $beacons, 2000000);
 
         $this->solution('15a', $positions);
 
@@ -21,16 +21,15 @@ class day15_beacon_exclusion_zone extends solver
     public function part1(Collection $sensors, Collection $beacons, $y) : int
     {
         /* get all the diamond cross-sections */
-        $overlaps = $this->find_diamond_cross_sections($sensors, $y);
+        $cross_sections = $this->find_diamond_cross_sections($sensors, $y);
 
-        /* total points that are on the cross-sections */
-        $total_points = $overlaps->reduce(fn($c, $i) => $i[1] - $i[0] + 1,0);
+        /* total points that are on the cross-sections, just add up the ranges */
+        $total_points = $cross_sections->reduce(fn($c, $i) => $i[1] - $i[0] + 1,0);
 
         /* we may have some beacons or sensors on the cross-sections */
-        $beacons_on_cross_section = $beacons->filter(fn($beacon)=> $this->on_cross_section($beacon, $y, $overlaps));
-        $sensors_on_cross_section = $sensors->filter(fn($sensor)=> $this->on_cross_section($sensor, $y, $overlaps));
+        $beacons_on_cross_section = $beacons->merge($sensors)->filter(fn($b)=> $this->on_cross_section($b, $y, $cross_sections));
 
-        return $total_points - $beacons_on_cross_section->count() - $sensors_on_cross_section->count();
+        return $total_points - $beacons_on_cross_section->count();
     }
 
     /* find all ranges of X of sensors where its Y overlaps */
@@ -42,6 +41,25 @@ class day15_beacon_exclusion_zone extends solver
                                   ->values();
 
         return $this->merge_cross_sections($cross_sections);
+
+    }
+
+    /* take a set of ranges and merge them into larger ranges when they overlap */
+    public function merge_cross_sections(Collection $cross_sections) : Collection
+    {
+        $stack = [];
+        $i = 0;
+        $stack[] = $cross_sections[0];
+
+        foreach($cross_sections as $k => $overlap) {
+            if ($overlap[0] <= $stack[$i][1]+1) {
+                $stack[$i][1] = max($overlap[1], $stack[$i][1]);
+            } else {
+                $stack[++$i] = $overlap;
+            }
+        }
+
+        return collect($stack);
     }
 
     /* which X points does this sensor overlap with on line y */
@@ -63,27 +81,10 @@ class day15_beacon_exclusion_zone extends solver
         return [$sensor->x - $dx, $sensor->x + $dx];
     }
 
-    /* take a set of ranges and merge them into larger ranges when they overlap */
-    public function merge_cross_sections($overlaps) : Collection
-    {
-        $stack = [];
-        $i = 0;
-        $stack[] = $overlaps[0];
-
-        foreach($overlaps as $k => $overlap) {
-            if ($overlap[0] <= $stack[$i][1]+1) {
-                $stack[$i][1] = max($overlap[1], $stack[$i][1]);
-            } else {
-                $stack[++$i] = $overlap;
-            }
-        }
-
-        return collect($stack);
-    }
-
+    /* check if a point falls within a range */
     public function on_cross_section(Point $point, int $y, Collection $overlaps) : bool
     {
-        /* y is not the same, not on this cross section */
+        /* y is not the same, not on this cross-section */
         if ($y !== $point->y) return false;
 
         foreach($overlaps as $overlap) {
