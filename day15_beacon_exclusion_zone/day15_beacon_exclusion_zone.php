@@ -10,8 +10,8 @@ class day15_beacon_exclusion_zone extends solver
 
         [$sensors, $beacons] = $this->parse_input($this->input);
 
-        $positions = $this->part1($sensors, $beacons, 10);
-        //$positions = $this->part1($sensors, $beacons, 2000000);
+        // $positions = $this->part1($sensors, $beacons, 10);
+        $positions = $this->part1($sensors, $beacons, 2000000);
 
         $this->solution('15a', $positions);
 
