@@ -6,6 +6,7 @@ class Sensor extends Point
 {
     public Beacon $beacon;
     public int $beacon_distance;
+    public array $close = [];
 
     public function __construct($x, $y, Beacon $beacon)
     {
