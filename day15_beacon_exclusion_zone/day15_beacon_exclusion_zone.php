@@ -5,7 +5,9 @@ use Tightenco\Collect\Support\Collection;
 class day15_beacon_exclusion_zone extends solver
 {
     public const Y = 2000000;
+    public const MIN = -2;
     public const MAX = 4000000;
+    public array $map = [];
 
     public function solve() : array
     {
@@ -15,7 +17,6 @@ class day15_beacon_exclusion_zone extends solver
         $this->solution('15a', $points);
 
         $point = $this->part2($sensors, $beacons);
-
         $this->solution('15b', 4000000 * $point[0] + $point[1]);
 
         return $this->solutions;
@@ -31,36 +32,56 @@ class day15_beacon_exclusion_zone extends solver
 
     public function part2(Collection $sensors, Collection $beacons)
     {
-        /* first find all the sensors that have an edge close to another sensor */
-        $sensors = $sensors->map(function($s1) use ($sensors) {
-            foreach ($sensors as $s2) {
+        $points = [];
+
+        foreach($sensors as $s1) {
+            foreach($sensors as $s2) {
+                /* if this sensor is at this precise distance, it's a candidate */
                 if ($s1->distance($s2) === $s1->beacon_distance + $s2->beacon_distance + 2) {
-                    $s1->close[] = $s2;
-                    return $s1;
-                }
-            }
-            return $s1;
-        });
 
-        /* now get all points around those edges and see if they fall within a beacon range */
-        foreach($sensors as $s) {
-            if (count($s->close) === 0) continue;
+                    /* since it's always a pair, just pick one of the 2 at random, the other one comes later */
+                    if($s1->x < $s2->x) {
 
-            $sx = $s->x; $sy = $s->y; $d = $s->beacon_distance;
-            foreach(range(0, $s->beacon_distance+1) as $dx) {
-                $dy = $s->beacon_distance - $dx + 1;
-                foreach([[$sx+$dx, $sy+$dy], [$sx+$dx, $sy-$dy], [$sx-$dx, $sy+$dy], [$sx-$dx, $sy-$dy]] as [$x,$y]) {
-                    if ($x<0 || $y<0 || $x>self::MAX || $y>self::MAX) continue;
+                        /* create the 2 intersection points p1/p2 where the 2 diamonds start "touching" */
+                        if ($s1->x > $s2->x - $s2->beacon_distance - 1) {
+                            $p1 = [$s1->x, $s1->y - $s1->beacon_distance - 1];
+                        } else {
+                            $p1 = [$s2->x - $s2->beacon_distance - 1, $s2->y];
+                        }
 
-                    foreach($sensors as $sensor2) {
-                        if ($this->distance($x, $y, $sensor2->x, $sensor2->y) <= $sensor2->beacon_distance) continue 2;
+                        if ($s2->x < $s1->x + $s1->beacon_distance + 1) {
+                            $p2 = [$s2->x, $s2->y + $s2->beacon_distance + 1];
+                        } else {
+                            $p2 = [$s1->x + $s1->beacon_distance + 1, $s1->y];
+                        }
+
+                        /* build all points between p1 and p1 */
+                        $points = $this->build_line($p1, $p2, $points);
                     }
-
-                    return [$x, $y];
                 }
             }
         }
-        return -1;
+
+        /* now we have a set of point candidates, just try them */
+        foreach($points as [$x, $y]) {
+            foreach($sensors as $sensor2) {
+                if ($this->distance($x, $y, $sensor2->x, $sensor2->y) <= $sensor2->beacon_distance) continue 2;
+            }
+            return [$x, $y];
+        }
+
+        die("should not happen!");
+    }
+
+    public function build_line(array $p1, array $p2, array $points) : array
+    {
+        $m = ($p1[1] - $p2[1]) / ($p1[0] - $p2[0]);
+        $b = $p1[1] - $m * $p1[0];
+
+        for ($i = $p1[0]; $i <= $p2[0]; $i++)
+            $points[] = array($i, $m * $i + $b);
+
+        return $points;
     }
 
     /* find all ranges that cross sensors on line Y, and merge them into combined ranges */
