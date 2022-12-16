@@ -79,7 +79,7 @@ class day15_beacon_exclusion_zone extends solver
         $b = $p1[1] - $m * $p1[0];
 
         for ($i = $p1[0]; $i <= $p2[0]; $i++)
-            $points[] = array($i, $m * $i + $b);
+            $points[] = [$i, $m * $i + $b];
 
         return $points;
     }
