@@ -23,10 +23,7 @@ class day16_proboscidea_volcanium extends solver
         /* a graph of travel times between all nodes, but skip nodes where we wont open valves */
         $travel_time = $this->build_graph($flowrates, $tunnels);
 
-        /* state of the valves, either open or closed, remove valves that we wont open */
-        $opened = array_map(fn($v)=>0, array_filter($flowrates, fn($f)=>$f !== 0));
-
-        return $this->calc_flow(30, 'AA', $opened, $travel_time, $flowrates);
+        return $this->calc_flow(30, 'AA', [], $travel_time, $flowrates);
     }
 
     public function build_graph(array $flowrates, array $tunnels) : array
@@ -79,7 +76,7 @@ class day16_proboscidea_volcanium extends solver
         $neighbors = $travel_time[$valve];
 
         foreach($neighbors as $neighbor => $t) {
-            if ($opened[$neighbor] === 1) continue;
+            if (isset($opened[$neighbor])) continue;
 
             /* we have to travel to the next valve, subtract its distance */
             $time_to_neighbor = $time - $t;
