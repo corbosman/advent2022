@@ -31,13 +31,15 @@ class day16_proboscidea_volcanium extends solver
     {
         $this->max_pressure = [];
         $this->cache = [];
-        $this->calc_flow(26, 'AA', 0b0, 0, $flowrates, true);
-
         $mask = (1 << count($this->valves_that_release_flow)) - 1;
+
+        $this->calc_flow(26, 'AA', 0b0, 0, $flowrates, true);
 
         $max = 0;
         foreach($this->max_pressure as $opened => $opened_pressure) {
             $unopened = $opened ^ $mask;
+
+            if (isset($this->max_pressure[$unopened])) output('FOUND!');
 
             $unopened_pressure = $this->max_pressure[$unopened] ?? $this->calc_flow(26, 'AA', $opened, 0, $flowrates, false);
 
