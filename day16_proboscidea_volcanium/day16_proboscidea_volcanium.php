@@ -50,7 +50,7 @@ class day16_proboscidea_volcanium extends solver
     {
         if ($time === 0) return 0;
 
-        $state = serialize("{$time}_{$valve}_{$opened}");
+        $state = "{$time}_{$valve}_{$opened}";
         $cache_hit = $this->cache[$state] ?? null;
         if ($cache_hit) return $cache_hit;
 
