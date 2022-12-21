@@ -39,8 +39,6 @@ class day16_proboscidea_volcanium extends solver
         foreach($this->max_pressure as $opened => $opened_pressure) {
             $unopened = $opened ^ $mask;
 
-            if (isset($this->max_pressure[$unopened])) output('FOUND!');
-
             $unopened_pressure = $this->max_pressure[$unopened] ?? $this->calc_flow(26, 'AA', $opened, 0, $flowrates, false);
 
             $max = max($max, $unopened_pressure + $opened_pressure);
