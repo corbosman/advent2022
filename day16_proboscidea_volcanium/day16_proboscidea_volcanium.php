@@ -1,105 +1,82 @@
 <?php namespace day16_proboscidea_volcanium;
-use day12_hill_climbing_algorithm\Heap;
-use Ds\Queue;
 use Lib\solver;
 use Tightenco\Collect\Support\Collection;
 
 class day16_proboscidea_volcanium extends solver
 {
+    public array $valves_that_release_flow = [];    // contains only those valves that actually release flow, anything else is not a useful travel target
+    public array $valve_distances = [];             // contains distances from every valve to every other valve
+    public array $cache = [];                       // memoization cache
+    public array $max_pressure = [];                // maximum pressure we see for each set of valve states
+
     public function solve() : array
     {
         $this->start_timer();
 
         [$flowrates, $tunnels] = $this->parse_input($this->input);
-        $pressure = $this->part1($flowrates, $tunnels);
+        $this->valve_distances = $this->build_graph($flowrates, $tunnels);
+        $this->valves_that_release_flow = array_map(fn($f)=>1<<$f, array_flip(array_keys(array_filter($flowrates, fn($f) => $f!==0))));
 
+        $pressure = $this->calc_flow(30, 'AA', 0b0, 0, $flowrates,  false);
         $this->solution('16a', $pressure);
+
+        $pressure = $this->part2($flowrates);
+        $this->solution('16b', $pressure);
 
         return $this->solutions;
     }
 
-    public function part1(array $flowrates, array $tunnels)
+    /* semi brute force. Calculate a normal 26/AA path, and for each possibility calculate the best score with the unopened valves */
+    public function part2(array $flowrates)
     {
-        /* a graph of travel times between all nodes, but skip nodes where we wont open valves */
-        $travel_time = $this->build_graph($flowrates, $tunnels);
+        $this->max_pressure = [];
+        $this->cache = [];
+        $this->calc_flow(26, 'AA', 0b0, 0, $flowrates, true);
 
-        return $this->calc_flow(30, 'AA', [], $travel_time, $flowrates);
+        $max = 0;
+        foreach($this->max_pressure as $opened => $pressure) {
+            $max = max($max, $this->calc_flow(26, 'AA', $opened, 0, $flowrates, false) + $pressure);
+        }
+        return $max;
+    }
+
+    public function calc_flow(int $time, string $valve, int $opened, int $total_pressure, array $flowrates, $part2)
+    {
+        if ($time === 0) return 0;
+
+        $state = serialize("{$time}_{$valve}_{$opened}");
+        $cache_hit = $this->cache[$state] ?? null;
+        if ($cache_hit) return $cache_hit;
+
+        $max_pressure = 0;
+        $valves_we_can_visit = $this->valve_distances[$valve];
+
+        /* try to open the valve */
+        if ($valve !== 'AA' && ($opened & $this->valves_that_release_flow[$valve]) === 0 ) {
+            $next_open = $opened | $this->valves_that_release_flow[$valve];
+            $pressure = ($time-1) * $flowrates[$valve];
+            $max_pressure = max($max_pressure, ($this->calc_flow($time-1, $valve, $next_open, $total_pressure+$pressure, $flowrates, $part2) + $pressure));
+        }
+
+        /* or move to other unopened valves */
+        foreach($valves_we_can_visit as $v => $t) {
+            if ($time - $t - 1 <= 0) continue;                               // cant reach it
+            if ($opened & $this->valves_that_release_flow[$v]) continue;     // already open
+
+            $max_pressure = max($max_pressure, $this->calc_flow($time-$t, $v, $opened, $total_pressure, $flowrates, $part2));
+        }
+
+        if ($part2) $this->max_pressure[$opened] = max($this->max_pressure[$opened] ?? 0, $total_pressure);
+
+        $this->cache[$state] = $max_pressure;
+        return $max_pressure;
     }
 
     public function build_graph(array $flowrates, array $tunnels) : array
     {
-        foreach($flowrates as $valve => $rate) {
-            $travel_time[$valve] = $this->dijkstra($valve, $flowrates, $tunnels);
-        }
-
+        foreach($flowrates as $valve => $rate)
+            $travel_time[$valve] = (new Dijkstra)->distances($valve, $flowrates, $tunnels);
         return $travel_time;
-    }
-
-
-    public function dijkstra($valve, $valves, $tunnels)
-    {
-        $q = new Heap;
-        $q->insert($valve, 0);
-        $visited[$valve] = 1;
-        $distances[$valve] = 0;
-
-        while($q->count() > 0) {
-            $valve = $q->extract();
-
-            $neighbors = $tunnels[$valve];
-
-            foreach($neighbors as $neighbor) {
-
-                if (isset($visited[$neighbor])) continue;
-
-                $distance = $distances[$valve] + 1;
-                $distance_n = $distances[$neighbor] ?? INFINITE;
-
-                if ($distance < $distance_n) {
-                    $distances[$neighbor] = $distance;
-                    $q->insert($neighbor, $distance);
-                }
-            }
-            $visited[$neighbor] = 1;
-        }
-
-        /* remove all zero distances, we never go to ourselves */
-        $distances = array_filter($distances, fn($v)=>$v !== 0);
-
-        /* it's useless going to a neighbor where you cant open a valve */
-        return array_filter($distances, fn($v)=>$valves[$v] !== 0, ARRAY_FILTER_USE_KEY);
-    }
-
-    public function calc_flow(int $time, string $valve, array $opened, array $travel_time, array $flowrates)
-    {
-        $flow = 0;
-        $neighbors = $travel_time[$valve];
-
-        foreach($neighbors as $neighbor => $t) {
-            if (isset($opened[$neighbor])) continue;
-
-            /* we have to travel to the next valve, subtract its distance */
-            $time_to_neighbor = $time - $t;
-
-            /* now we're opening a valve, subtract another minute */
-            $time_to_neighbor--;
-
-            if ($time_to_neighbor <= 0) continue;
-
-            /* calculate flow to this neighbor */
-            $neighbor_flow = $this->calc_flow($time_to_neighbor, $neighbor, $this->open($opened, $neighbor), $travel_time, $flowrates) + ( $time_to_neighbor * $flowrates[$neighbor]);
-
-            /* take the largest flow */
-            $flow = max($flow, $neighbor_flow);
-        }
-
-        return $flow;
-    }
-
-    public function open($opened, $valve)
-    {
-        $opened[$valve] = 1;
-        return $opened;
     }
 
     public function parse_input(Collection $input) : array
