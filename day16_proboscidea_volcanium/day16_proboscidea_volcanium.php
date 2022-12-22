@@ -30,16 +30,20 @@ class day16_proboscidea_volcanium extends solver
     public function part2(array $valves)
     {
         $this->cache = [];
-        $p = [];
-
         $this->calc_flow(26, 'AA', 0b0, 0, $valves, true);
+        arsort($this->max_pressure);
 
+        $max = 0;
         foreach($this->max_pressure as $opened => $pressure_player) {
             foreach($this->max_pressure as $unopened => $pressure_elephant) {
-               if (($opened & $unopened) === 0) $p[] = $pressure_player + $pressure_elephant;
+                if (($opened & $unopened) === 0) {
+                    $m = $pressure_player + $pressure_elephant;
+                    if ($m > $max) $max = $m;
+                    if ($m < $max) break;
+                }
             }
         }
-        return max($p);
+        return $max;
     }
 
     public function calc_flow(int $time, string $valve, int $opened, int $total_pressure, array $valves, $part2)
