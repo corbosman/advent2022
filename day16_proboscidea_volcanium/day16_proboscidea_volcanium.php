@@ -62,7 +62,7 @@ class day16_proboscidea_volcanium extends solver
             /* this is a trick to skip half the size of the tree. Jump AND open to a new valve, as we only care about valves we can open! */
             $next_open = $opened | $this->valves_bitmap[$v];
             $next_pressure = ($next_time) * $valves[$v];
-            $max_pressure = max($max_pressure, $this->calc_flow($time-$t-1, $v, $next_open, $total_pressure+$next_pressure, $valves, $part2) + $next_pressure);
+            $max_pressure = max($max_pressure, $this->calc_flow($next_time, $v, $next_open, $total_pressure+$next_pressure, $valves, $part2) + $next_pressure);
         }
 
         if ($part2) $this->max_pressure[$opened] = max($this->max_pressure[$opened] ?? 0, $total_pressure);
