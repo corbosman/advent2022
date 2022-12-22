@@ -60,7 +60,7 @@ class day16_proboscidea_volcanium extends solver
         /* or move to other unopened valves */
         foreach($valves_we_can_visit as $v => $t) {
             $next_time = $time - $t - 1;
-            if ($next_time <= 0) continue;                    // cant reach it
+            if ($next_time <= 0) continue;                        // cant reach it
             if ($opened & $this->valves_bitmap[$v]) continue;     // already open
 
             /* this is a trick to skip half the size of the tree. Jump AND open to a new valve, as we only care about valves we can open! */
