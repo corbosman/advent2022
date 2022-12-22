@@ -4,8 +4,8 @@ use Tightenco\Collect\Support\Collection;
 
 class day16_proboscidea_volcanium extends solver
 {
-    public array $valves_bitmap = [];    // an array of bit masks for every valve with a flowrate > 0
-    public array $valves_distances = [];             // contains distances from every valve to every other valve
+    public array $valves_bitmap = [];               // an array of bit masks for every valve with a flowrate > 0
+    public array $valves_distances = [];            // contains distances from every valve to every other valve
     public array $cache = [];                       // memoization cache
     public array $max_pressure = [];                // maximum pressure we see for each set of valve states
 
