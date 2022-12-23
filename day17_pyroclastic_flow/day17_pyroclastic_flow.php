@@ -14,8 +14,7 @@ class day17_pyroclastic_flow extends solver
 
         $chamber = new Chamber($this->parse_input($this->input));
         $chamber->drop_rocks(2022);
-
-        $this->solution('17a', $chamber->height()+1);
+        $this->solution('17a', $chamber->rock_height+1);
 
         return $this->solutions;
     }

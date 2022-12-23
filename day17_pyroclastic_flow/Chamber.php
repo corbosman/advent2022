@@ -3,11 +3,12 @@
 class Chamber
 {
     public array $rocks = [[0,0,0,30],[0,8,28,8],[0,4,4,28],[16,16,16,16],[0,0,24,24]];
-    public array $chamber = [0];
-    public int $chamber_height = 0;
-    public int $jetstream_size = 0;
-    public int $rock = 0;
-    public int $jet = 0;
+    public array $sizes = [1,3,3,4,2];
+    public int $rock_height = -1;       // height of the rock stack
+    public int $rock = 0;               // index of current rock
+    public array $chamber = [0];        // the chamber
+    public int $jetstream_size = 0;     // jetstream size
+    public int $jet = 0;                // jetstream index
 
     public function __construct(public array $jetstream) {
         $this->jetstream_size = count($this->jetstream);
@@ -20,12 +21,9 @@ class Chamber
 
     public function drop_rock() : void
     {
-        $rock  = $this->next_rock();     // next rock
-        $height = $this->height();       // get the highest rock position
-        $rock_pos = $height+4;           // start 4 higher
-        $this->expand_chamber($height);  // grow the chamber
-
-        /* loop until we hit something */
+        $rock  = $this->next_rock();
+        $rock_pos = $this->rock_height+4;
+        $this->expand_chamber();  // grow the chamber
         while(true) {
             $rock = match($this->jetstream[$this->jet++ % $this->jetstream_size]) {
                 '<' => $this->left($rock, $rock_pos),
@@ -35,20 +33,18 @@ class Chamber
             if ($new_pos === $rock_pos) break;
             $rock_pos = $new_pos;
         }
-
-        $this->land($rock, $rock_pos);
+        $this->stack($rock, $rock_pos);
     }
 
     public function left(array $rock, int $rock_pos) : array
     {
         for($i=0; $i<=3; $i++) {
             $row = $rock[3-$i];
-            if (($row & 0b1000000) !== 0) return $rock;   // left wall
+            if (($row & 0b1000000) !== 0) return $rock;
             $row <<= 1;
-            if (($row & $this->chamber[$rock_pos+$i]) !== 0) return $rock;  // collision
+            if (($row & $this->chamber[$rock_pos+$i]) !== 0) return $rock;
         }
 
-        /* we can move ! */
         for($i=0; $i<=3; $i++) $rock[$i] <<= 1;
 
         return $rock;
@@ -58,12 +54,11 @@ class Chamber
     {
         for($i=0; $i<=3; $i++) {
             $row = $rock[3-$i];
-            if (($row & 0b0000001) !== 0) return $rock;  // right wall
+            if (($row & 0b0000001) !== 0) return $rock;
             $row >>= 1;
-            if (($row & $this->chamber[$rock_pos+$i]) !== 0) return $rock; // collision
+            if (($row & $this->chamber[$rock_pos+$i]) !== 0) return $rock;
         }
 
-        /* we can move ! */
         for($i=0; $i<=3; $i++) $rock[$i] >>= 1;
 
         return $rock;
@@ -79,31 +74,23 @@ class Chamber
         return $rock_pos;
     }
 
-    public function land(array $rock, $rock_pos) : void
+    public function stack(array $rock, $rock_pos) : void
     {
         for($i=0; $i<=3; $i++) $this->chamber[$rock_pos+3-$i] |= $rock[$i];
-    }
-
-    /* return the highest rock position) */
-    public function height() : int
-    {
-        $height = $this->chamber_height;
-        while ($height > -1 && $this->chamber[$height] === 0) $height--;
-        return $height;
+        $rock_top = $rock_pos-1 + $this->sizes[$this->rock % 5];
+        if ($this->rock_height < $rock_top) $this->rock_height = $rock_top;
+        $this->rock++;
     }
 
     public function next_rock() : array
     {
-        $rock = $this->rock++ % 5;
+        $rock = $this->rock % 5;
         return $this->rocks[$rock];
     }
 
-    public function expand_chamber(int $floor) : void
+    public function expand_chamber() : void
     {
-        while($this->chamber_height <= $floor + 7) {
-            ++$this->chamber_height;
-            $this->chamber[] = 0;
-        }
+        for($i=$this->rock_height+1; $i<=$this->rock_height+7; $i++) $this->chamber[] = 0;
     }
 
     public function print_chamber(array $rock = [], int $rock_pos = -1) : void
@@ -115,9 +102,9 @@ class Chamber
                 $chamber[$rock_pos+$i] |= $rock[3-$i];
             }
         }
-        for($i=$this->chamber_height-1; $i>=0; $i--) {
+        for($i=$this->rock_height+7; $i>=0; $i--) {
             $this->print_row($chamber[$i]);
-            if ($i< $this->chamber_height - 15) break;
+            if ($i< $this->rock_height - 15) break;
         }
         echo "\n";
     }
