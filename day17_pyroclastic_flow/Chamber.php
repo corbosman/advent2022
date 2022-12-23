@@ -81,10 +81,7 @@ class Chamber
 
     public function land(array $rock, $rock_pos) : void
     {
-        for($i=0; $i<=3; $i++) {
-            $r = $this->chamber[$rock_pos+3-$i] | $rock[$i];
-            $this->chamber[$rock_pos+3-$i] = $r;
-        }
+        for($i=0; $i<=3; $i++) $this->chamber[$rock_pos+3-$i] |= $rock[$i];
     }
 
     /* return the floor of the chamber (highest rock position) */
