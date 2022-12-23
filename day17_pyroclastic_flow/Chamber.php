@@ -21,7 +21,7 @@ class Chamber
     public function drop_rock() : void
     {
         $rock  = $this->next_rock();     // next rock
-        $height = $this->height();       // get the height rock position
+        $height = $this->height();       // get the highest rock position
         $rock_pos = $height+4;           // start 4 higher
         $this->expand_chamber($height);  // grow the chamber
 
