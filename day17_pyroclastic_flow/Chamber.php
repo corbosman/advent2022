@@ -108,11 +108,6 @@ class Chamber
         echo "\n";
     }
 
-    public function print_rock(array $rock) : void
-    {
-        for($i=0; $i<=3; $i++) $this->print_row($rock[$i]);
-    }
-
     public function print_row(int $row) : void
     {
         $mask = 0b1000000;
