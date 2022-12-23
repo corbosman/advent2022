@@ -20,7 +20,7 @@ class day17_pyroclastic_flow extends solver
         return $this->solutions;
     }
 
-    public function parse_input(Collection $input)
+    public function parse_input(Collection $input) : array
     {
         return str_split(($input->first()));
     }
