@@ -20,10 +20,10 @@ class Chamber
 
     public function drop_rock() : void
     {
-        $rock  = $this->next_rock();    // next rock
-        $floor = $this->floor();        // get the highest rock position
-        $rock_pos = $floor+4;           // start 4 higher
-        $this->expand_chamber($floor);  // grow the chamber
+        $rock  = $this->next_rock();     // next rock
+        $height = $this->height();       // get the height rock position
+        $rock_pos = $height+4;           // start 4 higher
+        $this->expand_chamber($height);  // grow the chamber
 
         /* loop until we hit something */
         while(true) {
@@ -88,7 +88,7 @@ class Chamber
     }
 
     /* return the floor of the chamber (highest rock position) */
-    public function floor() : int
+    public function height() : int
     {
         $height = $this->chamber_height;
         while ($height > -1 && $this->chamber[$height] === 0) $height--;
