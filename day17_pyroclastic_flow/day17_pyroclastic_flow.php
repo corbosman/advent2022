@@ -5,9 +5,6 @@ use Ds\Map;
 
 class day17_pyroclastic_flow extends solver
 {
-    public array $rocks = [[0,0,0,30],[0,8,28,8],[0,4,4,28],[16,16,16,16],[0,0,24,24]];
-    public array $chamber = [];
-
     public function solve() : array
     {
         $this->start_timer();
