@@ -23,7 +23,7 @@ class Chamber
     {
         $rock  = $this->next_rock();
         $rock_pos = $this->rock_height+4;
-        $this->expand_chamber();  // grow the chamber
+        $this->expand_chamber();
         while(true) {
             $rock = match($this->jetstream[$this->jet++ % $this->jetstream_size]) {
                 '<' => $this->left($rock, $rock_pos),
@@ -84,8 +84,7 @@ class Chamber
 
     public function next_rock() : array
     {
-        $rock = $this->rock % 5;
-        return $this->rocks[$rock];
+        return $this->rocks[$this->rock % 5];
     }
 
     public function expand_chamber() : void
