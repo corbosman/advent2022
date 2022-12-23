@@ -84,7 +84,7 @@ class Chamber
         for($i=0; $i<=3; $i++) $this->chamber[$rock_pos+3-$i] |= $rock[$i];
     }
 
-    /* return the floor of the chamber (highest rock position) */
+    /* return the highest rock position) */
     public function height() : int
     {
         $height = $this->chamber_height;
