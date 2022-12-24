@@ -1,4 +1,5 @@
 <?php namespace day18_boiling_boulders;
+use Ds\Map;
 use Ds\Set;
 use Lib\solver;
 use Tightenco\Collect\Support\Collection;
@@ -15,12 +16,11 @@ class day18_boiling_boulders extends solver
         return $this->solutions;
     }
 
-    public function part1(Collection $cubes, Collection $lookup) : int
+    public function part1(Collection $cubes, Map $lookup) : int
     {
-        return $cubes->reduce(function($adjacent, $cube) use ($cubes, $lookup) {
+        return $cubes->reduce(function($adjacent, $cube) use ($lookup) {
             foreach([[1,0,0],[-1,0,0],[0,1,0],[0,-1,0],[0,0,1],[0,0,-1]] as [$dx, $dy, $dz]) {
-                $nx = $cube->x+$dx; $ny = $cube->y+$dy; $nz=$cube->z+$dz;
-                if (!isset($lookup["{$nx}_{$ny}_{$nz}"])) $adjacent++;
+                if (!$lookup->hasKey([$cube->x+$dx, $cube->y+$dy, $cube->z+$dz])) $adjacent++;
             }
             return $adjacent;
         }, 0);
@@ -32,7 +32,8 @@ class day18_boiling_boulders extends solver
             [$x,$y,$z] = explode(',', $c);
             return new Point($x, $y, $z);
         });
-        $lookup = $cubes->mapWithKeys(fn($cube)=>["{$cube->x}_{$cube->y}_{$cube->z}" => 1]);
+        $lookup = new Map;
+        $cubes->each(fn($cube)=>$lookup->put([$cube->x, $cube->y, $cube->z], 1));
         return [$cubes, $lookup];
     }
  }
