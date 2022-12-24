@@ -51,13 +51,13 @@ class day18_boiling_boulders extends solver
     public function flood(Map $cubes, Point $min, Point $max) : Map
     {
         $exterior = new Map;
-        $queue = new Deque;
+        $queue = new Queue;
 
         $exterior->put([$min->x, $min->y, $min->z],1);
         $queue->push([$min->x, $min->y, $min->z]);
 
         while($queue->count() > 0) {
-            [$x, $y, $z] = $queue->shift();
+            [$x, $y, $z] = $queue->pop();
 
             foreach([[1,0,0],[-1,0,0],[0,1,0],[0,-1,0],[0,0,1],[0,0,-1]] as [$dx, $dy, $dz]) {
                 $nx = $x+$dx; $ny = $y+$dy; $nz = $z+$dz;
