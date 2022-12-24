@@ -35,6 +35,7 @@ class Chamber
             $this->drop_rock();
             $key = $this->key();
 
+            /* found a repeated series! */
             if (isset($cache[$key])) {
                 [$cache_rock, $cache_rock_height] = $cache[$key];
 
