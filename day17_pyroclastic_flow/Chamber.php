@@ -1,5 +1,7 @@
 <?php namespace day17_pyroclastic_flow;
 
+use Ds\Map;
+
 class Chamber
 {
     public array $rocks = [[0,0,0,30],[0,8,28,8],[0,4,4,28],[16,16,16,16],[0,0,24,24]];
@@ -9,6 +11,9 @@ class Chamber
     public array $chamber = [0];        // the chamber
     public int $jetstream_size = 0;     // jetstream size
     public int $jet = 0;                // jetstream index
+    public const ROCKS = 5;
+    public const PRINT = 15;
+    public const KEYSIZE = 7;           // minimum key size necessary to have a unique fit
 
     public function __construct(public array $jetstream) {
         $this->jetstream_size = count($this->jetstream);
@@ -17,6 +22,53 @@ class Chamber
     public function drop_rocks(int $count) : void
     {
         for($i=0; $i<$count;$i++) $this->drop_rock();
+    }
+
+    public function avalanche(int $count) : int
+    {
+        $cache = new Map();
+
+        /* make sure we drop some rocks, so we match the key size */
+        $this->drop_rocks(self::KEYSIZE-1);
+
+        while(true) {
+            $this->drop_rock();
+            $key = $this->key();
+
+            if (isset($cache[$key])) {
+                [$cache_rock, $cache_rock_height] = $cache[$key];
+
+                /* height at detection of repeat */
+                $current_height = $this->rock_height;
+
+                /* number of total drops still to do at start of detected repeat */
+                $drop_count = $count - $cache_rock;
+
+                /* numbers of rocks dropped during the repeat interval */
+                $delta_rocks = $this->rock - $cache_rock;
+
+                /* number of times this repeat can fit in the remaining drop count */
+                $number_of_repeats = floor($drop_count / $delta_rocks);
+
+                /* number of total rocks dropped at end of all repeats */
+                $drop_count -= ($delta_rocks * $number_of_repeats);
+
+                /* height at the end of all the repeated intervals */
+                $total_height = $cache_rock_height +
+                                (($current_height - $cache_rock_height) * $number_of_repeats);
+
+
+                /* now drop some more rocks */
+                for($i=0; $i<$drop_count; $i++) $this->drop_rock();
+
+                /* how much height did we add in these last drops */
+                $added_height = $this->rock_height - $current_height;
+
+                /* return the total height at the end */
+                return $total_height + $added_height;
+            }
+            $cache[$key] = [$this->rock, $this->rock_height];
+        }
     }
 
     public function drop_rock() : void
@@ -77,45 +129,29 @@ class Chamber
     public function stack(array $rock, $rock_pos) : void
     {
         for($i=0; $i<=3; $i++) $this->chamber[$rock_pos+3-$i] |= $rock[$i];
-        $rock_top = $rock_pos-1 + $this->sizes[$this->rock % 5];
+        $rock_top = $rock_pos-1 + $this->sizes[$this->rock % self::ROCKS];
         if ($this->rock_height < $rock_top) $this->rock_height = $rock_top;
         $this->rock++;
     }
 
     public function next_rock() : array
     {
-        return $this->rocks[$this->rock % 5];
+        return $this->rocks[$this->rock % self::ROCKS];
     }
 
     public function expand_chamber() : void
     {
-        for($i=$this->rock_height+1; $i<=$this->rock_height+7; $i++) $this->chamber[] = 0;
+        for($i=$this->rock_height+1; $i<=$this->rock_height+7; $i++) {
+            if (!isset($this->chamber[$i])) $this->chamber[$i] = 0;
+        }
     }
 
-    public function print_chamber(array $rock = [], int $rock_pos = -1) : void
+    public function key(): string
     {
-        $chamber = $this->chamber;
-
-        if ($rock_pos !== -1) {
-            for($i=0; $i<=3; $i++) {
-                $chamber[$rock_pos+$i] |= $rock[3-$i];
-            }
-        }
-        for($i=$this->rock_height+7; $i>=0; $i--) {
-            $this->print_row($chamber[$i]);
-            if ($i< $this->rock_height - 15) break;
-        }
-        echo "\n";
-    }
-
-    public function print_row(int $row) : void
-    {
-        $mask = 0b1000000;
-        for ($i=0; $i<7; $i++) {
-            echo(($row & $mask) !== 0 ? '#' : '.');
-            $mask >>= 1;
-        }
-        echo "\n";
+        $key = array_slice($this->chamber, $this->rock_height - (self::KEYSIZE - 1), self::KEYSIZE);
+        $key[] = $this->jet % $this->jetstream_size;
+        $key[] = $this->rock % self::ROCKS;
+        return implode('_', $key);
     }
 
 }
