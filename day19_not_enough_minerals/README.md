@@ -1,4 +1,4 @@
-First iteration of 19a is pretty slow, 110s but correct answer. 
+First iteration of 19a is pretty slow, 110s but correct answer. 19b couldn't be calculated. We need to reduce the options or think of a different method.
 
 Thoughts as I work through making it faster:
 
