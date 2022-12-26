@@ -16,3 +16,4 @@ Now I was able to run 19b, it took 5 minutes.
 * But, maybe we dont even need to iterate? If we know the time needed to build a geode robot, can we just calculate the end result?? Explore this! The reason I thought of this was that I noticed some recipes have a geode count of 0. This means we were never ever able to build a single geode robot and have it produce 1 geode in the allotted time. Surely you can precalculate this from the recipe?
 * We can probably throw out some state if we know we won't beat a previous state
 * Maybe stop counting per minute. Like in Day 16, only think in terms of building robots and the time needed to build the next robot. This will probably be a lot faster but needs a big rewrite.
+* There is probably a point where we have too many resources for the rest of the game and we can stop making them.
