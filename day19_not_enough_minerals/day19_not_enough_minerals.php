@@ -53,33 +53,33 @@ class day19_not_enough_minerals extends solver
             $cache->put($state, 1);
 
             if ($this->can_build_geode_robot($state, $bp)) {
-                $next_state = $this->mine($state, $bp);
+                $next_state = $this->mine($state, $bp, $time);
                 $next_state = $this->build_geode_robot($next_state, $bp);
                 $queue->push([$time-1, $geodes+$state[6], $next_state]);
                 continue;
             }
 
             if ($this->can_build_obsidian_robot($state, $bp)) {
-                $next_state = $this->mine($state, $bp);
+                $next_state = $this->mine($state, $bp, $time);
                 $next_state = $this->build_obsidian_robot($next_state, $bp);
                 $queue->push([$time-1, $geodes+$state[6], $next_state]);
 
             }
 
             if ($this->can_build_clay_robot($state, $bp)) {
-                $next_state = $this->mine($state, $bp);
+                $next_state = $this->mine($state, $bp, $time);
                 $next_state = $this->build_clay_robot($next_state, $bp);
                 $queue->push([$time-1, $geodes+$state[6], $next_state]);
             }
 
             if ($this->can_build_ore_robot($state, $bp)) {
-                $next_state = $this->mine($state, $bp);
+                $next_state = $this->mine($state, $bp, $time);
                 $next_state = $this->build_ore_robot($next_state, $bp);
                 $queue->push([$time-1, $geodes+$state[6], $next_state]);
             }
 
             /* dont build anything, just mine resources */
-            $state = $this->mine($state, $bp);
+            $state = $this->mine($state, $bp, $time);
             $queue->push([$time-1, $geodes+$state[6], $state]);
         }
         output("geodes={$max_geodes} states={$states}");
@@ -87,11 +87,16 @@ class day19_not_enough_minerals extends solver
     }
 
     /* 0=time 1=ore 2=clay 3=obsidian 4=geode 5=ore_robot 6=clay_robot 7=obsidian_robot 8=geode_robot */
-    public function mine(array $state, Blueprint $bp) : array
+    public function mine(array $state, Blueprint $bp, int $time) : array
     {
         $state[0] += $state[3];         // mine ore
         $state[1] += $state[4];         // mine clay
         $state[2] += $state[5];         // mine obsidian
+
+        /* never mine more resources than we can use */
+        $state[0] = min($state[0], ($time * $bp->max_ore_cost) - ($time-1 * $state[3]));
+        $state[1] = min($state[1], ($time * $bp->max_clay_cost) - ($time-1 * $state[4]));
+        $state[2] = min($state[2], ($time * $bp->max_obsidian_cost) - ($time-1 * $state[5]));
 
         return $state;
     }
