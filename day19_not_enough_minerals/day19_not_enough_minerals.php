@@ -80,7 +80,6 @@ class day19_not_enough_minerals extends solver
             $state = $this->mine($state, $bp, $time);
             $queue->push([$time-1, $geodes+$state[6], $state]);
         }
-        output("geodes={$max_geodes} states={$states}");
         return $max_geodes;
     }
 
