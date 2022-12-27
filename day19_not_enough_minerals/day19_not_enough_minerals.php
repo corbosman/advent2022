@@ -6,8 +6,6 @@ use Tightenco\Collect\Support\Collection;
 
 class day19_not_enough_minerals extends solver
 {
-    public int $top_geodes = 0;    // keep score of the top number of geodes we've seen over all blueprints
-
     public function solve() : array
     {
         $this->start_timer();
