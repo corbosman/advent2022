@@ -34,10 +34,8 @@ class day19_not_enough_minerals extends solver
         $cache = new Map;
         $queue = new Deque;
         $queue->push([$max_time, 0, [0,0,0,1,0,0,0]]);
-        $states = 1;
 
         while($queue->count() > 0) {
-            $states++;
             [$time, $geodes, $state] = $queue->shift();
 
             if ($time <= 0)  {
