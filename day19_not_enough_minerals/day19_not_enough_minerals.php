@@ -45,7 +45,6 @@ class day19_not_enough_minerals extends solver
 
             if ($cache->hasKey($state)) continue;
 
-            // $this->print_state($state);
             $cache->put($state, 1);
 
             if ($time > 1 && $this->can_build_geode_robot($state, $bp)) {
