@@ -1,7 +1,5 @@
 <?php namespace day20_grove_positioning_system;
 use Lib\solver;
-use teewurst\Prs4AdvancedWildcardComposer\Di\FactoryInterface;
-use teewurst\Prs4AdvancedWildcardComposer\tests\Unit\Di\InvokableFactoryTest;
 use Tightenco\Collect\Support\Collection;
 
 class day20_grove_positioning_system extends solver
