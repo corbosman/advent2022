@@ -16,14 +16,14 @@ class day20_grove_positioning_system extends solver
     public function part1(Collection $input)
     {
         $encrypted = $input->map(fn($v, $k)=>new Number($k, $v));
-        $decrypted = $input->map(fn($v, $k)=>new Number($k, $v));
+        $decrypted = $encrypted;
 
         $size = $encrypted->count() - 1;
         foreach($encrypted as $n) {
             if ($n->value === 0) continue;
 
             /* find this element and remove it */
-            $position =  $decrypted->search(fn($x)=>$x->id === $n->id);
+            $position =  $decrypted->search($n);
             $decrypted->splice($position, 1);
 
             /* place it in the new spot */
