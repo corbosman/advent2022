@@ -27,7 +27,7 @@ class day19_not_enough_minerals extends solver
         return $blueprints->take(3)->map(fn($bp) => $this->mine_geodes($bp, 32))->reduce(fn($carry, $geode) => $carry*=$geode, 1);
     }
 
-    /* 0=time 1=ore 2=clay 3=obsidian 4=geode 5=ore_robot 6=clay_robot 7=obsidian_robot 8=geode_robot */
+    /* 0=ore 1=clay 2=obsidian 3=ore_robot 4=clay_robot 5=obsidian_robot 6=geode_robot */
     public function mine_geodes(Blueprint $bp, int $max_time) : int
     {
         $max_geodes = 0;
@@ -80,7 +80,7 @@ class day19_not_enough_minerals extends solver
         return $max_geodes;
     }
 
-    /* 0=time 1=ore 2=clay 3=obsidian 4=geode 5=ore_robot 6=clay_robot 7=obsidian_robot 8=geode_robot */
+    /* 0=ore 1=clay 2=obsidian 3=ore_robot 4=clay_robot 5=obsidian_robot 6=geode_robot */
     public function mine(array $state, Blueprint $bp, int $time) : array
     {
         $state[0] += $state[3];         // mine ore
@@ -95,7 +95,7 @@ class day19_not_enough_minerals extends solver
         return $state;
     }
 
-    /* 0=time 1=ore 2=clay 3=obsidian 4=geode 5=ore_robot 6=clay_robot 7=obsidian_robot 8=geode_robot */
+    /* 0=ore 1=clay 2=obsidian 3=ore_robot 4=clay_robot 5=obsidian_robot 6=geode_robot */
     public function can_build_geode_robot(array $state, Blueprint $bp) : bool
     {
         /* not enough ore */
@@ -107,7 +107,7 @@ class day19_not_enough_minerals extends solver
         return true;
     }
 
-    /* 0=time 1=ore 2=clay 3=obsidian 4=geode 5=ore_robot 6=clay_robot 7=obsidian_robot 8=geode_robot */
+    /* 0=ore 1=clay 2=obsidian 3=ore_robot 4=clay_robot 5=obsidian_robot 6=geode_robot */
     private function build_geode_robot(array $state, Blueprint $bp): array
     {
         $state[6]++;                                // geode robot
@@ -116,7 +116,7 @@ class day19_not_enough_minerals extends solver
         return $state;
     }
 
-    /* 0=time 1=ore 2=clay 3=obsidian 4=geode 5=ore_robot 6=clay_robot 7=obsidian_robot 8=geode_robot */
+    /* 0=ore 1=clay 2=obsidian 3=ore_robot 4=clay_robot 5=obsidian_robot 6=geode_robot */
     public function can_build_obsidian_robot(array $state, Blueprint $bp) : bool
     {
         /* not enough ore */
@@ -131,7 +131,7 @@ class day19_not_enough_minerals extends solver
         return true;
     }
 
-    /* 0=time 1=ore 2=clay 3=obsidian 4=geode 5=ore_robot 6=clay_robot 7=obsidian_robot 8=geode_robot */
+    /* 0=ore 1=clay 2=obsidian 3=ore_robot 4=clay_robot 5=obsidian_robot 6=geode_robot */
     public function build_obsidian_robot(array $state, Blueprint $bp) : array
     {
         $state[5]++;                                // obsidian robot
@@ -140,7 +140,7 @@ class day19_not_enough_minerals extends solver
         return $state;
     }
 
-    /* 0=time 1=ore 2=clay 3=obsidian 4=geode 5=ore_robot 6=clay_robot 7=obsidian_robot 8=geode_robot */
+    /* 0=ore 1=clay 2=obsidian 3=ore_robot 4=clay_robot 5=obsidian_robot 6=geode_robot */
     public function can_build_clay_robot(array $state, Blueprint $bp) : bool
     {
         /* not enough ore */
@@ -152,7 +152,7 @@ class day19_not_enough_minerals extends solver
         return true;
     }
 
-    /* 0=time 1=ore 2=clay 3=obsidian 4=geode 5=ore_robot 6=clay_robot 7=obsidian_robot 8=geode_robot */
+    /* 0=ore 1=clay 2=obsidian 3=ore_robot 4=clay_robot 5=obsidian_robot 6=geode_robot */
     public function build_clay_robot(array $state, Blueprint $bp) : array
     {
         $state[4]++;                                // clay robot
@@ -160,7 +160,7 @@ class day19_not_enough_minerals extends solver
         return $state;
     }
 
-    /* 0=time 1=ore 2=clay 3=obsidian 4=geode 5=ore_robot 6=clay_robot 7=obsidian_robot 8=geode_robot */
+    /* 0=ore 1=clay 2=obsidian 3=ore_robot 4=clay_robot 5=obsidian_robot 6=geode_robot */
     public function can_build_ore_robot(array $state, Blueprint $bp) : bool
     {
         /* not enough ore */
@@ -172,7 +172,7 @@ class day19_not_enough_minerals extends solver
         return true;
     }
 
-    /* 0=time 1=ore 2=clay 3=obsidian 4=geode 5=ore_robot 6=clay_robot 7=obsidian_robot 8=geode_robot */
+    /* 0=ore 1=clay 2=obsidian 3=ore_robot 4=clay_robot 5=obsidian_robot 6=geode_robot */
     public function build_ore_robot(array $state, Blueprint $bp) : array
     {
         $state[3]++;                                // ore robot
@@ -180,7 +180,7 @@ class day19_not_enough_minerals extends solver
         return $state;
     }
 
-    /* 0=time 1=ore 2=clay 3=obsidian 4=geode 5=ore_robot 6=clay_robot 7=obsidian_robot 8=geode_robot */
+    /* 0=ore 1=clay 2=obsidian 3=ore_robot 4=clay_robot 5=obsidian_robot 6=geode_robot */
     public function print_state($state) : void
     {
         output("time={$state[0]} ore={$state[1]} clay={$state[2]} obsidian={$state[3]} geode={$state[4]} ore_robot={$state[5]} clay_robot={$state[6]} obsidian_robot={$state[7]} geode_robot={$state[8]}");
