@@ -52,27 +52,27 @@ class day19_not_enough_minerals extends solver
             // $this->print_state($state);
             $cache->put($state, 1);
 
-            if ($this->can_build_geode_robot($state, $bp)) {
+            if ($time > 1 && $this->can_build_geode_robot($state, $bp)) {
                 $next_state = $this->mine($state, $bp, $time);
                 $next_state = $this->build_geode_robot($next_state, $bp);
                 $queue->push([$time-1, $geodes+$state[6], $next_state]);
                 continue;
             }
 
-            if ($this->can_build_obsidian_robot($state, $bp)) {
+            if ($time > 4 && $this->can_build_obsidian_robot($state, $bp)) {
                 $next_state = $this->mine($state, $bp, $time);
                 $next_state = $this->build_obsidian_robot($next_state, $bp);
                 $queue->push([$time-1, $geodes+$state[6], $next_state]);
 
             }
 
-            if ($this->can_build_clay_robot($state, $bp)) {
+            if ($time > 7 && $this->can_build_clay_robot($state, $bp)) {
                 $next_state = $this->mine($state, $bp, $time);
                 $next_state = $this->build_clay_robot($next_state, $bp);
                 $queue->push([$time-1, $geodes+$state[6], $next_state]);
             }
 
-            if ($this->can_build_ore_robot($state, $bp)) {
+            if ($time > 15 && $this->can_build_ore_robot($state, $bp)) {
                 $next_state = $this->mine($state, $bp, $time);
                 $next_state = $this->build_ore_robot($next_state, $bp);
                 $queue->push([$time-1, $geodes+$state[6], $next_state]);
