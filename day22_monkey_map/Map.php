@@ -6,6 +6,7 @@ class Map
     public int $step_index = 0;
     public int $height;
     public int $width;
+    public array $crumbs = [];
 
     public function __construct(
         public array $map,
@@ -23,17 +24,17 @@ class Map
             match($p) {
                 'L' => $this->turn_left(),
                 'R' => $this->turn_right(),
-                default => $this->move_forward($p)
+                default => $this->forward($p)
             };
         }
+        $this->print($this->map);
         return [$this->x, $this->y, $this->step_index];
     }
 
-    public function move_forward(int $steps) : void
+    public function forward(int $steps) : void
     {
         for($i=0; $i<$steps; $i++) {
-            $nx = ($this->x + self::STEPS[$this->step_index][0] + $this->width) % $this->width;
-            $ny = ($this->y + self::STEPS[$this->step_index][1] + $this->height) % $this->height;
+            [$nx, $ny] = $this->step($this->x, $this->y);
 
             if ($this->map[$ny][$nx] === ' ') [$nx, $ny] = $this->portal($nx, $ny);
 
@@ -46,16 +47,18 @@ class Map
                 default:
                     die("should not happen!");
             }
+            $this->crumbs[] = [$this->x, $this->y, $this->step_index];
         }
     }
 
+    /* move from one edge to another edge */
     public function portal(int $x, int $y) : array
     {
         [$nx, $ny] = [$x, $y];
         while (true) {
-            $nx = ($nx + self::STEPS[$this->step_index][0] + $this->width) % $this->width;
-            $ny = ($ny + self::STEPS[$this->step_index][1] + $this->height) % $this->height;
+            [$nx, $ny] = $this->step($nx, $ny);
             if ($this->map[$ny][$nx] !== ' ') break;
+            $this->crumbs[] = [$nx, $ny, $this->step_index];
         }
         return [$nx, $ny];
     }
@@ -70,13 +73,20 @@ class Map
         $this->step_index = ($this->step_index + 1 + 4) % 4;
     }
 
-//    public function print(array $map) : void
-//    {
-//        foreach($this->crumbs as [$x, $y, $step_index]) {
-//            $map[$y][$x] = match($step_index) {
-//                0 => '>', 1 => 'v', 2 => '<', 3 => '^', default => '@'
-//            };
-//        }
-//        print_grid($map,1);
-//    }
+    /* take one step taking into account the direction we're facing */
+    public function step(int $x, int $y) : array
+    {
+        return [($x + self::STEPS[$this->step_index][0] + $this->width) % $this->width,
+                ($y + self::STEPS[$this->step_index][1] + $this->height) % $this->height];
+    }
+
+    public function print(array $map) : void
+    {
+        foreach($this->crumbs as [$x, $y, $step_index]) {
+            $map[$y][$x] = match($step_index) {
+                0 => '>', 1 => 'v', 2 => '<', 3 => '^', default => '@'
+            };
+        }
+        print_grid($map,1);
+    }
 }
