@@ -53,22 +53,16 @@ class day21_monkey_math extends solver
         [$left_name, $operation, $right_name] = $monkeys[$path[$index]];
         $left_num  = $this->yell($monkeys, $left_name);
         $right_num = $this->yell($monkeys, $right_name);
+        $n = $left_name === $path[$index+1] ? $right_num : $left_num;
+        $sign = $left_name === $path[$index+1] ? 1 : -1;
 
-        if ($left_name === $path[$index+1]) {
-            $next_num = match($operation) {
-                '+' => $num - $right_num,
-                '-' => $num + $right_num,
-                '*' => intdiv($num, $right_num),
-                '/' => ($num ** 1) * $right_num,
-            };
-        } else {
-            $next_num = match($operation) {
-                '+' => $num - $left_num,
-                '-' => $left_num - $num,
-                '*' => intdiv($num, $left_num),
-                '/' => ($num ** 1) * $left_num,
-            };
-        }
+        $next_num = match($operation) {
+            '+' => $num - $n,
+            '-' => ($sign * $num) + $n,
+            '*' => intdiv($num, $n),
+            '/' => ($num ** $sign) * $n,
+        };
+
         return $this->find_human_number($monkeys, $path, $next_num, $index+1);
     }
 
