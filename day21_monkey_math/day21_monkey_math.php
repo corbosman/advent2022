@@ -11,32 +11,27 @@ class day21_monkey_math extends solver
         $this->start_timer();
 
         $monkeys = $this->parse_input($this->input);
-        $this->solution('21a', $this->part1($monkeys));
+        $this->solution('21a', $this->yell($monkeys, 'root'));
         $this->solution('21b', $this->part2($monkeys));
 
         return $this->solutions;
     }
 
-    public function part1(Collection $monkeys) : int
-    {
-        [$left, $right] = $this->solve_root($monkeys, 'root');
-        return $left+$right;
-    }
-
     public function part2(Collection $monkeys) : int
     {
         /* one of these two values is correct, the other is wrong because humn is wrong */
-        [$left_num, $right_num] = $this->solve_root($monkeys, 'root');
-        [$left_monkey, $_, $right_monkey] = $monkeys['root'];
+        [$left_name, $_, $right_name] = $monkeys['root'];
+        $left_num  = $this->yell($monkeys, $left_name);
+        $right_num = $this->yell($monkeys, $right_name);
 
         /* find the path to humn */
         $path = $this->find_lucy($monkeys, 'root', collect())->reverse()->values();
 
         /* the correct value is the one that's not towards humn */
-        $value = ($path[1] === $left_monkey) ? $right_num : $left_num;
+        $value = ($path[1] === $left_name) ? $right_num : $left_num;
 
         /* now backtrace the calculation */
-        return $this->trace_human($monkeys, $path, $value, 1);
+        return $this->find_human_number($monkeys, $path, $value, 1);
     }
 
     public function find_lucy(Collection $monkeys, string $search, Collection $path) : ?Collection
@@ -51,62 +46,48 @@ class day21_monkey_math extends solver
         return null;
     }
 
-    public function trace_human(Collection $monkeys, Collection $path, int $root_val, $index) : int
+    public function find_human_number(Collection $monkeys, Collection $path, int $num, $index) : int
     {
-        if ($path[$index] === "humn") return $root_val;
+        if ($path[$index] === "humn") return $num;
 
-        [$left, $operation, $right] = $monkey = $monkeys[$path[$index]];
-        [$left_val, $right_val] = $this->solve_root($monkeys, $path[$index]);
+        [$left_name, $operation, $right_name] = $monkeys[$path[$index]];
+        $left_num  = $this->yell($monkeys, $left_name);
+        $right_num = $this->yell($monkeys, $right_name);
 
-        if ($left === $path[$index+1]) {
-            $new_value = match($operation) {
-                '+' => $root_val - $right_val,
-                '-' => $root_val + $right_val,
-                '*' => intdiv($root_val, $right_val),
-                '/' => ($root_val ** 1) * $right_val,
+        if ($left_name === $path[$index+1]) {
+            $next_num = match($operation) {
+                '+' => $num - $right_num,
+                '-' => $num + $right_num,
+                '*' => intdiv($num, $right_num),
+                '/' => ($num ** 1) * $right_num,
             };
         } else {
-            $new_value = match($operation) {
-                '+' => $root_val - $left_val,
-                '-' => $left_val - $root_val,
-                '*' => intdiv($root_val, $left_val),
-                '/' => ($root_val ** 1) * $left_val,
+            $next_num = match($operation) {
+                '+' => $num - $left_num,
+                '-' => $left_num - $num,
+                '*' => intdiv($num, $left_num),
+                '/' => ($num ** 1) * $left_num,
             };
         }
-        return $this->trace_human($monkeys, $path, $new_value, $index+1);
+        return $this->find_human_number($monkeys, $path, $next_num, $index+1);
     }
-    public function solve_root(Collection $monkeys, string $root) : array
+
+    public function yell(Collection $monkeys, string $name) : int
     {
-        $unsolved = new Deque;
-        $solved = new Map;
+        $job = $monkeys[$name];
 
-        /* split jobs into solved and unsolved */
-        foreach($monkeys as $monkey => $job) {
-            if (is_int($job)) $solved->put($monkey, $job);
-            else $unsolved->push([$monkey, $job]);
-        }
+        if (is_int($job)) return $job;
 
-        while($unsolved->count() > 0) {
-            [$monkey, [$left, $operation, $right]] = $unsolved->shift();
+        [$left_name, $operation, $right_name] = $job;
+        $left_num  = $this->yell($monkeys, $left_name);
+        $right_num = $this->yell($monkeys, $right_name);
 
-            /* try to solve either side */
-            if (!is_int($left)  && $solved->hasKey($left))  $left = $solved[$left];
-            if (!is_int($right) && $solved->hasKey($right)) $right = $solved[$right];
-
-            /* if both our solved, perform operation and move to solved */
-            if (is_int($left) && is_int($right)) {
-                $solved[$monkey] = match ($operation) {
-                    '+' => $left + $right,
-                    '*' => $left * $right,
-                    '-' => $left - $right,
-                    '/' => $left / $right,
-                };
-                if ($monkey === $root) return [$left, $right];
-            } else {
-                $unsolved->push([$monkey, [$left, $operation, $right]]);
-            }
-        }
-        die("should not happen");
+        return match($operation) {
+            '+' => $left_num + $right_num,
+            '*' => $left_num * $right_num,
+            '-' => $left_num - $right_num,
+            '/' => $left_num / $right_num,
+        };
     }
 
     public function parse_input(Collection $input)
