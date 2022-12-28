@@ -39,9 +39,9 @@ class day21_monkey_math extends solver
         if ($search === 'humn') return $path->push($search);
 
         if (is_array($monkeys[$search])) {
-            [$left,,$right] = $monkeys[$search];
-            if (($this->find_lucy($monkeys, $left, $path)) !== null)  return $path->push($search);
-            if (($this->find_lucy($monkeys, $right, $path)) !== null) return $path->push($search);
+            [$left_name,,$right_name] = $monkeys[$search];
+            if (($this->find_lucy($monkeys, $left_name, $path)) !== null)  return $path->push($search);
+            if (($this->find_lucy($monkeys, $right_name, $path)) !== null) return $path->push($search);
         }
         return null;
     }
