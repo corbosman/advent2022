@@ -10,6 +10,7 @@ class day22_monkey_map extends solver
 
         [$map, $path] = $this->parse_input($this->input);
         $this->solution('22a', $this->part1($map, $path));
+        $this->solution('22b', $this->part2($map, $path));
 
         return $this->solutions;
     }
@@ -18,6 +19,13 @@ class day22_monkey_map extends solver
     {
         [$x, $y] = $this->find_start($map);
         [$x, $y, $step_index] = (new Map($map, $path, $x, $y))->walk();
+        return (1000*($y+1)) + 4 * ($x+1) + $step_index;
+    }
+
+    public function part2(array $map, array $path) : int
+    {
+        [$x, $y] = $this->find_start($map);
+        [$x, $y, $step_index] = (new Cube($map, $path, $x, $y))->walk();
         return (1000*($y+1)) + 4 * ($x+1) + $step_index;
     }
 

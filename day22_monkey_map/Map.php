@@ -27,7 +27,6 @@ class Map
                 default => $this->forward($p)
             };
         }
-        $this->print($this->map);
         return [$this->x, $this->y, $this->step_index];
     }
 
@@ -35,14 +34,16 @@ class Map
     {
         for($i=0; $i<$steps; $i++) {
             [$nx, $ny] = $this->step($this->x, $this->y);
+            $ni = $this->step_index;
 
-            if ($this->map[$ny][$nx] === ' ') [$nx, $ny] = $this->portal($nx, $ny);
+            if ($this->map[$ny][$nx] === ' ') [$nx, $ny, $ni] = $this->portal($nx, $ny);
 
             switch($this->map[$ny][$nx]) {
                 case '#':
                     break 2;
                 case '.':
                     [$this->x, $this->y] = [$nx, $ny];
+                    $this->step_index = $ni;
                     break;
                 default:
                     die("should not happen!");
@@ -52,15 +53,14 @@ class Map
     }
 
     /* move from one edge to another edge */
-    public function portal(int $x, int $y) : array
+    public function portal(int $nx, int $ny) : array
     {
-        [$nx, $ny] = [$x, $y];
         while (true) {
             [$nx, $ny] = $this->step($nx, $ny);
             if ($this->map[$ny][$nx] !== ' ') break;
             $this->crumbs[] = [$nx, $ny, $this->step_index];
         }
-        return [$nx, $ny];
+        return [$nx, $ny, $this->step_index];
     }
 
     public function turn_left() : void
@@ -87,6 +87,7 @@ class Map
                 0 => '>', 1 => 'v', 2 => '<', 3 => '^', default => '@'
             };
         }
+        $map[75][100] = 'X';
         print_grid($map,1);
     }
 }
