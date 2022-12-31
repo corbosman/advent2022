@@ -26,7 +26,7 @@ class Dijkstra
                     $q->insert($neighbor, $distance);
                 }
             }
-            $visited[$neighbor] = 1;
+            $visited[$valve] = 1;
         }
 
         /* remove all zero distances, we never go to ourselves */
