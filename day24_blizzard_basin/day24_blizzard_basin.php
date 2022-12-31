@@ -23,17 +23,32 @@ class day24_blizzard_basin extends solver
         /* get a weather forecast */
         $forecast = $this->forecast($map);
 
+        $minutes = $this->part1($map, $forecast);
+
         /* time to walk to the end */
-        $minutes = $this->walk($map, $forecast, [1,0], [$this->width-2,$this->height-1]);
         $this->solution('24a', $minutes);
+
+        $this->solution('24b', $this->part2($map, $forecast, $minutes));
 
         return $this->solutions;
     }
 
-    public function walk(Vector $map, array $forecast, array $start, array $end) : int
+    public function part1(Vector $map, array $forecast) : int
+    {
+        return $this->walk($forecast, [1,0], [$this->width-2,$this->height-1], 0);
+    }
+
+    public function part2(Vector $map, array $forecast, int $minutes) : int
+    {
+        $minutes = $this->walk($forecast, [$this->width-2,$this->height-1], [1,0], $minutes);
+        $minutes = $this->walk($forecast, [1,0], [$this->width-2,$this->height-1], $minutes);
+        return $minutes;
+    }
+
+    public function walk(array $forecast, array $start, array $end, int $time) : int
     {
         $q = new PriorityQueue;
-        $q->push([$start, 0], 0);
+        $q->push([$start, $time], 0);
 
         /* visited is a set of position and time */
         $visited = new Set;
@@ -70,7 +85,7 @@ class day24_blizzard_basin extends solver
             $ny = $y+$dy;
 
             /* out of bounds */
-            if ($nx < 0 || $nx >= $this->width-1 || $ny < 1 || $ny > $this->height - 1) continue;
+            if ($nx < 0 || $nx >= $this->width-1 || $ny < 0 || $ny > $this->height - 1) continue;
 
             /* position is taken by a blizzard or a wall */
             if ($weather->contains([$nx, $ny])) continue;
@@ -122,7 +137,7 @@ class day24_blizzard_basin extends solver
     /* a weighted priority to prefer being closer to the end point, else we keep looping back to the start */
     public function priority(int $minutes, array $position, array $end) : int
     {
-        $distance = 3 * (abs($end[0] - $position[0]) + abs($end[1] - $position[1]));
+        $distance = 2 * (abs($end[0] - $position[0]) + abs($end[1] - $position[1]));
         return -1 * ($minutes + 1 + $distance);
     }
 
